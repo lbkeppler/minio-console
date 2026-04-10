@@ -69,23 +69,22 @@ export function ObjectPreview({ bucket, objectKey, onClose }: ObjectPreviewProps
 					</div>
 				)}
 
-				{content && !loading && !error && (
-					<>
-						{content.content_type.startsWith("image/") ? (
-							<img
-								src={`data:${content.content_type};base64,${content.data}`}
-								alt={filename}
-								className="max-w-full rounded"
-							/>
-						) : content.is_text ? (
-							<pre className="whitespace-pre-wrap break-words text-sm">{content.data}</pre>
-						) : (
-							<p className="text-sm text-[var(--color-text-secondary)]">
-								Binary file, download to view
-							</p>
-						)}
-					</>
-				)}
+				{content &&
+					!loading &&
+					!error &&
+					(content.content_type.startsWith("image/") ? (
+						<img
+							src={`data:${content.content_type};base64,${content.data}`}
+							alt={filename}
+							className="max-w-full rounded"
+						/>
+					) : content.is_text ? (
+						<pre className="whitespace-pre-wrap break-words text-sm">{content.data}</pre>
+					) : (
+						<p className="text-sm text-[var(--color-text-secondary)]">
+							Binary file, download to view
+						</p>
+					))}
 			</div>
 
 			{content && !loading && (

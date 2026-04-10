@@ -1,14 +1,9 @@
+import { Loader2, Plus, Shield, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type UserInfo, useAdminStore } from "@/stores/admin-store";
 import { useToastStore } from "@/stores/toast-store";
-import { Loader2, Plus, Shield, X } from "lucide-react";
 
 interface UserPoliciesDialogProps {
 	user: UserInfo;
@@ -16,13 +11,8 @@ interface UserPoliciesDialogProps {
 	onOpenChange: (open: boolean) => void;
 }
 
-export function UserPoliciesDialog({
-	user,
-	open,
-	onOpenChange,
-}: UserPoliciesDialogProps) {
-	const { policies, loadPolicies, attachPolicy, detachPolicy, loadUsers } =
-		useAdminStore();
+export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDialogProps) {
+	const { policies, loadPolicies, attachPolicy, detachPolicy, loadUsers } = useAdminStore();
 	const { addToast } = useToastStore();
 	const [selectedPolicy, setSelectedPolicy] = useState("");
 	const [attaching, setAttaching] = useState(false);
@@ -72,9 +62,7 @@ export function UserPoliciesDialog({
 		}
 	}
 
-	const availablePolicies = policies.filter(
-		(p) => !user.policies.includes(p.name),
-	);
+	const availablePolicies = policies.filter((p) => !user.policies.includes(p.name));
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -97,11 +85,7 @@ export function UserPoliciesDialog({
 								</option>
 							))}
 						</select>
-						<Button
-							onClick={handleAttach}
-							disabled={!selectedPolicy || attaching}
-							size="sm"
-						>
+						<Button onClick={handleAttach} disabled={!selectedPolicy || attaching} size="sm">
 							{attaching ? (
 								<Loader2 className="h-4 w-4 animate-spin" />
 							) : (
@@ -113,9 +97,7 @@ export function UserPoliciesDialog({
 					{/* Current policies */}
 					<div className="space-y-1">
 						{user.policies.length === 0 ? (
-							<p className="text-sm text-[var(--color-text-tertiary)]">
-								No policies attached.
-							</p>
+							<p className="text-sm text-[var(--color-text-tertiary)]">No policies attached.</p>
 						) : (
 							user.policies.map((p) => (
 								<div
@@ -126,11 +108,7 @@ export function UserPoliciesDialog({
 										<Shield className="h-4 w-4 text-[var(--color-accent)]" />
 										<span className="text-sm">{p}</span>
 									</div>
-									<Button
-										variant="ghost"
-										size="icon"
-										onClick={() => handleDetach(p)}
-									>
+									<Button variant="ghost" size="icon" onClick={() => handleDetach(p)}>
 										<X className="h-4 w-4 text-[var(--color-danger)]" />
 									</Button>
 								</div>
