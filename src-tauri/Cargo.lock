@@ -2962,6 +2962,7 @@ dependencies = [
  "aws-credential-types",
  "aws-sdk-s3",
  "aws-smithy-types",
+ "base64 0.22.1",
  "dirs",
  "keyring",
  "reqwest 0.12.28",

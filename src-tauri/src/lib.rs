@@ -26,6 +26,14 @@ pub fn run() {
             commands::objects::get_presigned_url,
             commands::objects::upload_object,
             commands::objects::download_object,
+            commands::objects::get_object_content,
+            commands::bucket_config::get_bucket_config,
+            commands::bucket_config::set_versioning,
+            commands::bucket_config::set_bucket_policy,
+            commands::bucket_config::delete_bucket_policy,
+            commands::bucket_config::get_lifecycle_rules,
+            commands::bucket_config::put_lifecycle_rule,
+            commands::bucket_config::delete_lifecycle_rule,
         ])
         .setup(|app| {
             #[cfg(debug_assertions)]
