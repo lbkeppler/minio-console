@@ -98,9 +98,24 @@
 			"noLifecycleRules": "No lifecycle rules configured.",
 			"prefixHint": "Optional. Filter objects by key prefix.",
 			"accessPolicy": "Access Policy",
-			"bucketPolicy": "Bucket Policy",
-			"savePolicy": "Save Policy",
-			"policyPlaceholder": "Paste JSON policy here, or leave empty and save to delete",
+			"bucketPolicy": "Access Policy",
+			"policyDescription": "Control anonymous access to this bucket. Similar to mc anonymous set.",
+			"savePolicy": "Apply",
+			"policyPlaceholder": "Paste custom JSON policy here",
+			"policyDeleted": "Bucket set to private",
+			"policySaved": "Access policy applied",
+			"policyError": "Error applying policy",
+			"accessMode": {
+				"private": "Private",
+				"download": "Download",
+				"public": "Public",
+				"custom": "Custom JSON"
+			},
+			"accessModeHint": {
+				"private": "No anonymous access. Only authenticated users with permissions can access.",
+				"download": "Anonymous users can list and download objects (read-only).",
+				"public": "Anonymous users can list, download, upload and delete objects (read-write)."
+			},
 			"encryption": "Encryption",
 			"tags": "Tags",
 			"events": "Events",

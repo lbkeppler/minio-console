@@ -98,9 +98,24 @@
 			"noLifecycleRules": "Nenhuma regra de ciclo de vida configurada.",
 			"prefixHint": "Opcional. Filtrar objetos por prefixo da chave.",
 			"accessPolicy": "Política de Acesso",
-			"bucketPolicy": "Política do Bucket",
-			"savePolicy": "Salvar Política",
-			"policyPlaceholder": "Cole a política JSON aqui, ou deixe vazio e salve para excluir",
+			"bucketPolicy": "Política de Acesso",
+			"policyDescription": "Controle o acesso anônimo ao bucket. Equivalente ao mc anonymous set.",
+			"savePolicy": "Aplicar",
+			"policyPlaceholder": "Cole a política JSON customizada aqui",
+			"policyDeleted": "Bucket definido como privado",
+			"policySaved": "Política de acesso aplicada",
+			"policyError": "Erro ao aplicar política",
+			"accessMode": {
+				"private": "Privado",
+				"download": "Download",
+				"public": "Público",
+				"custom": "JSON Customizado"
+			},
+			"accessModeHint": {
+				"private": "Sem acesso anônimo. Apenas usuários autenticados com permissão podem acessar.",
+				"download": "Usuários anônimos podem listar e baixar objetos (somente leitura).",
+				"public": "Usuários anônimos podem listar, baixar, enviar e excluir objetos (leitura e escrita)."
+			},
 			"encryption": "Criptografia",
 			"tags": "Tags",
 			"events": "Eventos",

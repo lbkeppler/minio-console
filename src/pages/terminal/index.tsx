@@ -17,6 +17,7 @@ interface HistoryEntry {
 }
 
 const MC_COMMANDS = [
+	// Top-level object commands
 	"ls",
 	"mb",
 	"rb",
@@ -30,37 +31,208 @@ const MC_COMMANDS = [
 	"find",
 	"diff",
 	"mirror",
+	"pipe",
+	"watch",
+	"tree",
+	"undo",
+	// Anonymous access
+	"anonymous",
+	"anonymous set",
+	"anonymous get",
+	"anonymous get-json",
+	"anonymous set-json",
+	"anonymous list",
+	"anonymous links",
+	// Management commands
+	"alias",
+	"alias set",
+	"alias remove",
+	"alias list",
+	"batch",
+	"batch list",
+	"batch status",
+	"batch describe",
+	"batch generate",
+	"encrypt",
+	"encrypt set",
+	"encrypt info",
+	"encrypt clear",
+	"event",
+	"event add",
+	"event remove",
+	"event list",
+	"idp",
+	"idp openid",
+	"idp openid add",
+	"idp openid update",
+	"idp openid rm",
+	"idp openid ls",
+	"idp openid info",
+	"idp openid enable",
+	"idp openid disable",
+	"idp ldap",
+	"idp ldap add",
+	"idp ldap update",
+	"idp ldap rm",
+	"idp ldap ls",
+	"idp ldap info",
+	"idp ldap enable",
+	"idp ldap disable",
+	"idp ldap policy",
+	"idp ldap policy entities",
+	"idp ldap policy attach",
+	"idp ldap policy detach",
+	"ilm",
+	"ilm rule",
+	"ilm rule add",
+	"ilm rule edit",
+	"ilm rule ls",
+	"ilm rule rm",
+	"ilm rule import",
+	"ilm rule export",
+	"ilm tier",
+	"ilm tier add",
+	"ilm tier info",
+	"ilm tier ls",
+	"ilm tier rm",
+	"ilm tier edit",
+	"ilm tier verify",
+	"ilm restore",
+	"inventory",
+	"inventory list",
+	"inventory add",
+	"inventory rm",
+	"legalhold",
+	"legalhold set",
+	"legalhold info",
+	"legalhold clear",
+	"license",
+	"license register",
+	"license info",
+	"license update",
+	"quota",
+	"quota set",
+	"quota info",
+	"quota clear",
+	"replicate",
+	"replicate add",
+	"replicate update",
+	"replicate rm",
+	"replicate ls",
+	"replicate status",
+	"replicate resync",
+	"replicate backlog",
+	"retention",
+	"retention set",
+	"retention info",
+	"retention clear",
+	"share",
+	"share download",
+	"share upload",
+	"share list",
+	"snap",
+	"support",
+	"support perf",
+	"support perf object",
+	"support perf net",
+	"support perf drive",
+	"support perf client",
+	"support top",
+	"support top api",
+	"support top disk",
+	"support top locks",
+	"support top net",
+	"support top rpc",
+	"support inspect",
+	"support profile",
+	"support callhome",
+	"support diag",
+	"tag",
+	"tag set",
+	"tag remove",
+	"tag list",
+	"update",
 	"version",
+	"version info",
+	"version enable",
+	"version disable",
+	"version suspend",
+	// Admin commands
+	"admin",
 	"admin info",
-	"admin user list",
+	"admin user",
 	"admin user add",
 	"admin user remove",
-	"admin user enable",
 	"admin user disable",
-	"admin group list",
+	"admin user enable",
+	"admin user list",
+	"admin user info",
+	"admin user svcacct",
+	"admin user svcacct add",
+	"admin user svcacct ls",
+	"admin user svcacct rm",
+	"admin user svcacct info",
+	"admin user svcacct set",
+	"admin user svcacct enable",
+	"admin user svcacct disable",
+	"admin group",
 	"admin group add",
 	"admin group remove",
+	"admin group list",
 	"admin group info",
-	"admin policy list",
-	"admin policy info",
+	"admin group enable",
+	"admin group disable",
+	"admin policy",
 	"admin policy create",
 	"admin policy remove",
+	"admin policy list",
+	"admin policy info",
 	"admin policy attach",
 	"admin policy detach",
 	"admin policy entities",
+	"admin config",
 	"admin config get",
 	"admin config set",
 	"admin config reset",
+	"admin config export",
+	"admin config import",
+	"admin config restore",
 	"admin heal",
 	"admin trace",
 	"admin console",
+	"admin decommission",
+	"admin decommission start",
+	"admin decommission status",
+	"admin decommission cancel",
+	"admin rebalance",
+	"admin rebalance start",
+	"admin rebalance status",
+	"admin rebalance stop",
+	"admin prometheus",
 	"admin prometheus metrics",
+	"admin prometheus generate",
+	"admin service",
 	"admin service restart",
 	"admin service stop",
+	"admin service unfreeze",
 	"admin update",
+	"admin kms",
+	"admin kms key",
+	"admin kms key create",
+	"admin kms key status",
+	"admin cluster",
+	"admin cluster bucket",
+	"admin cluster bucket export",
+	"admin cluster bucket import",
+	"admin cluster iam",
+	"admin cluster iam export",
+	"admin cluster iam import",
+	"admin bucket",
+	"admin bucket remote",
 	"admin bucket remote add",
 	"admin bucket remote ls",
 	"admin bucket remote rm",
+	"admin replicate",
 	"admin replicate add",
 	"admin replicate info",
 	"admin replicate rm",
@@ -99,20 +271,38 @@ export function TerminalPage() {
 		scrollToBottom();
 	}, [history, scrollToBottom]);
 
+	function getTopLevelCommands() {
+		const topLevel = new Set<string>();
+		for (const cmd of MC_COMMANDS) {
+			topLevel.add(cmd.split(" ")[0] ?? cmd);
+		}
+		return Array.from(topLevel);
+	}
+
 	function updateSuggestions(value: string) {
-		if (!value.trim()) {
-			setSuggestions([]);
-			setShowSuggestions(false);
+		const trimmed = value.trimStart();
+		// Empty input or comma: show top-level commands
+		if (!trimmed || trimmed === ",") {
+			const topLevel = getTopLevelCommands();
+			setSuggestions(topLevel.slice(0, 12));
+			setSelectedSuggestion(0);
+			setShowSuggestions(true);
 			return;
 		}
-		const lower = value.toLowerCase();
+		const lower = trimmed.toLowerCase();
 		const matches = MC_COMMANDS.filter((cmd) => cmd.startsWith(lower) && cmd !== lower);
-		setSuggestions(matches.slice(0, 8));
+		setSuggestions(matches.slice(0, 10));
 		setSelectedSuggestion(0);
 		setShowSuggestions(matches.length > 0);
 	}
 
 	function handleInputChange(value: string) {
+		// Comma triggers autocomplete showing all commands
+		if (value.endsWith(",")) {
+			setCommand("");
+			updateSuggestions("");
+			return;
+		}
 		setCommand(value);
 		updateSuggestions(value);
 	}
@@ -154,6 +344,12 @@ export function TerminalPage() {
 	);
 
 	function handleKeyDown(e: React.KeyboardEvent) {
+		// Tab on empty or with comma triggers autocomplete
+		if (e.key === "Tab" && !showSuggestions) {
+			e.preventDefault();
+			updateSuggestions(command);
+			return;
+		}
 		if (showSuggestions && suggestions.length > 0) {
 			if (e.key === "Tab" || (e.key === "ArrowRight" && suggestions.length > 0)) {
 				e.preventDefault();
