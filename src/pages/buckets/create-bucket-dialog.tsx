@@ -24,10 +24,7 @@ export function CreateBucketDialog({ open, onOpenChange }: CreateBucketDialogPro
 			.string()
 			.min(3, t("validation.bucketNameMin"))
 			.max(63, t("validation.bucketNameMax"))
-			.regex(
-				/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/,
-				t("validation.bucketNamePattern"),
-			),
+			.regex(/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/, t("validation.bucketNamePattern")),
 	});
 
 	type BucketFormData = z.infer<typeof bucketSchema>;

@@ -35,7 +35,9 @@ export function BucketsPage() {
 			accessorKey: "creation_date",
 			header: t("common.created"),
 			cell: ({ row }) =>
-				row.original.creation_date ? new Date(row.original.creation_date).toLocaleDateString() : "—",
+				row.original.creation_date
+					? new Date(row.original.creation_date).toLocaleDateString()
+					: "—",
 		},
 	];
 

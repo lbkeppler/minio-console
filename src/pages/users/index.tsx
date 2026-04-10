@@ -71,9 +71,7 @@ export function UsersPage() {
 		return (
 			<div className="space-y-4">
 				<h1 className="text-2xl font-semibold">{t("pages.users.title")}</h1>
-				<p className="text-[var(--color-text-secondary)]">
-					{t("pages.users.selectProfileFirst")}
-				</p>
+				<p className="text-[var(--color-text-secondary)]">{t("pages.users.selectProfileFirst")}</p>
 			</div>
 		);
 	}

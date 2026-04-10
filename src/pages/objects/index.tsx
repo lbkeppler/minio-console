@@ -57,9 +57,7 @@ export function ObjectsPage() {
 		return (
 			<div className="space-y-4">
 				<h1 className="text-2xl font-semibold">{t("pages.objects.title")}</h1>
-				<p className="text-[var(--color-text-secondary)]">
-					{t("pages.objects.selectBucketFirst")}
-				</p>
+				<p className="text-[var(--color-text-secondary)]">{t("pages.objects.selectBucketFirst")}</p>
 			</div>
 		);
 	}

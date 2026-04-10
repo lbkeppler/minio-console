@@ -110,7 +110,9 @@ export function SettingsPage() {
 			<Dialog open={formOpen} onOpenChange={setFormOpen}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>{editingProfile ? t("pages.settings.editProfile") : t("pages.settings.newProfile")}</DialogTitle>
+						<DialogTitle>
+							{editingProfile ? t("pages.settings.editProfile") : t("pages.settings.newProfile")}
+						</DialogTitle>
 					</DialogHeader>
 					<ProfileForm profile={editingProfile} onClose={() => setFormOpen(false)} />
 				</DialogContent>

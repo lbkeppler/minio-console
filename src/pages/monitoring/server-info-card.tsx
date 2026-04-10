@@ -35,7 +35,9 @@ export function ServerInfoCard({ info }: ServerInfoCardProps) {
 					{t("pages.monitoring.drives")}
 				</div>
 				<div className="text-lg font-semibold">
-					<span className="text-[var(--color-success)]">{info.drives_online} {t("common.online")}</span>
+					<span className="text-[var(--color-success)]">
+						{info.drives_online} {t("common.online")}
+					</span>
 					{" / "}
 					<span className={info.drives_offline > 0 ? "text-[var(--color-error)]" : ""}>
 						{info.drives_offline} {t("common.offline")}

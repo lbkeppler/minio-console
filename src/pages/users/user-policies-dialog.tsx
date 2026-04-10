@@ -70,7 +70,9 @@ export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDia
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>{t("pages.policies.title")} — {user.access_key}</DialogTitle>
+					<DialogTitle>
+						{t("pages.policies.title")} — {user.access_key}
+					</DialogTitle>
 				</DialogHeader>
 				<div className="mt-4 space-y-4">
 					{/* Attach new policy */}
@@ -99,7 +101,9 @@ export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDia
 					{/* Current policies */}
 					<div className="space-y-1">
 						{user.policies.length === 0 ? (
-							<p className="text-sm text-[var(--color-text-tertiary)]">{t("pages.users.noPoliciesAttached")}</p>
+							<p className="text-sm text-[var(--color-text-tertiary)]">
+								{t("pages.users.noPoliciesAttached")}
+							</p>
 						) : (
 							user.policies.map((p) => (
 								<div

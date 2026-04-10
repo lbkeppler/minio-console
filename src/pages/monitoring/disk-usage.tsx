@@ -39,7 +39,9 @@ export function DiskUsage({ disks }: DiskUsageProps) {
 						<span>
 							{formatBytes(disk.used_bytes)} / {formatBytes(disk.total_bytes)}
 						</span>
-						<span>{formatBytes(disk.available_bytes)} {t("common.free")}</span>
+						<span>
+							{formatBytes(disk.available_bytes)} {t("common.free")}
+						</span>
 					</div>
 				</div>
 			))}

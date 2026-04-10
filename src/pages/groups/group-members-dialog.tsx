@@ -84,7 +84,9 @@ export function GroupMembersDialog({ group, open, onOpenChange }: GroupMembersDi
 					</div>
 					<div className="max-h-64 space-y-1 overflow-y-auto">
 						{group.members.length === 0 && (
-							<p className="text-sm text-[var(--color-text-secondary)]">{t("pages.groups.noMembers")}</p>
+							<p className="text-sm text-[var(--color-text-secondary)]">
+								{t("pages.groups.noMembers")}
+							</p>
 						)}
 						{group.members.map((member) => (
 							<div

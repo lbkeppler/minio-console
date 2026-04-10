@@ -68,7 +68,11 @@ export function UploadDialog({ open, onOpenChange }: UploadDialogProps) {
 					<div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-[var(--color-border)] py-8">
 						<Upload className="mb-2 h-8 w-8 text-[var(--color-text-tertiary)]" />
 						<Button onClick={handleSelectFiles} disabled={uploading}>
-							{uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : t("pages.objects.selectFiles")}
+							{uploading ? (
+								<Loader2 className="h-4 w-4 animate-spin" />
+							) : (
+								t("pages.objects.selectFiles")
+							)}
 						</Button>
 					</div>
 				</div>

@@ -79,7 +79,9 @@ export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) 
 						{errors.secretKey && (
 							<p className="text-xs text-[var(--color-danger)]">{errors.secretKey.message}</p>
 						)}
-						<p className="text-xs text-[var(--color-text-tertiary)]">{t("pages.users.secretKeyHint")}</p>
+						<p className="text-xs text-[var(--color-text-tertiary)]">
+							{t("pages.users.secretKeyHint")}
+						</p>
 					</div>
 					<div className="flex justify-end gap-2">
 						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>

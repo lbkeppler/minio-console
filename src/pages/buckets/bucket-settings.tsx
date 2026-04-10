@@ -88,7 +88,9 @@ export function BucketSettingsPage() {
 						<ArrowLeft className="h-4 w-4" />
 					</Button>
 				</Link>
-				<h1 className="text-2xl font-semibold">{bucket} — {t("pages.buckets.settings")}</h1>
+				<h1 className="text-2xl font-semibold">
+					{bucket} — {t("pages.buckets.settings")}
+				</h1>
 				{loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />}
 			</div>
 

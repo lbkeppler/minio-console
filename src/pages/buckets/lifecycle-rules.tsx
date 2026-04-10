@@ -92,7 +92,9 @@ export function LifecycleRules({ bucket }: LifecycleRulesProps) {
 			</div>
 
 			{lifecycleRules.length === 0 ? (
-				<p className="text-sm text-[var(--color-text-secondary)]">{t("pages.buckets.noLifecycleRules")}</p>
+				<p className="text-sm text-[var(--color-text-secondary)]">
+					{t("pages.buckets.noLifecycleRules")}
+				</p>
 			) : (
 				<div className="space-y-2">
 					{lifecycleRules.map((rule) => (
@@ -104,8 +106,8 @@ export function LifecycleRules({ bucket }: LifecycleRulesProps) {
 								<p className="text-sm font-medium">{rule.id}</p>
 								<p className="text-xs text-[var(--color-text-secondary)]">
 									{t("common.prefix")}: {rule.prefix || "(none)"} · {t("common.expirationDays")}:{" "}
-									{rule.expiration_days != null ? `${rule.expiration_days}` : "—"} · {t("common.status")}:{" "}
-									{rule.status}
+									{rule.expiration_days != null ? `${rule.expiration_days}` : "—"} ·{" "}
+									{t("common.status")}: {rule.status}
 								</p>
 							</div>
 							<Button variant="ghost" size="icon" onClick={() => handleDelete(rule.id)}>
