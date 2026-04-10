@@ -65,7 +65,7 @@ export function ObjectsPage() {
 	const prefixParts = prefix.split("/").filter(Boolean);
 	const breadcrumbs = prefixParts.map((part, i) => ({
 		label: part,
-		prefix: prefixParts.slice(0, i + 1).join("/") + "/",
+		prefix: `${prefixParts.slice(0, i + 1).join("/")}/`,
 	}));
 
 	const columns: ColumnDef<ObjectInfo, string>[] = [

@@ -5,8 +5,8 @@ use crate::models::types::McCommandResult;
 pub async fn run_mc_command(command: String) -> Result<McCommandResult, String> {
     let alias_name = alias::ensure_alias().await?;
 
-    let parts: Vec<String> = shell_words::split(&command)
-        .map_err(|e| format!("Failed to parse command: {}", e))?;
+    let parts: Vec<String> =
+        shell_words::split(&command).map_err(|e| format!("Failed to parse command: {}", e))?;
 
     if parts.is_empty() {
         return Err("Empty command".to_string());

@@ -8,7 +8,9 @@ pub async fn get_server_info() -> Result<ServerInfo, String> {
     let json: serde_json::Value =
         serde_json::from_str(&output).map_err(|e| format!("Failed to parse mc output: {}", e))?;
 
-    let info = json.get("info").ok_or("Missing 'info' field in mc output")?;
+    let info = json
+        .get("info")
+        .ok_or("Missing 'info' field in mc output")?;
 
     let version = info
         .get("version")
@@ -80,10 +82,7 @@ pub async fn get_disk_usage() -> Result<Vec<DiskInfo>, String> {
                     .get("totalSpace")
                     .and_then(|v| v.as_u64())
                     .unwrap_or(0);
-                let used_bytes = drive
-                    .get("usedSpace")
-                    .and_then(|v| v.as_u64())
-                    .unwrap_or(0);
+                let used_bytes = drive.get("usedSpace").and_then(|v| v.as_u64()).unwrap_or(0);
                 let available_bytes = total_bytes.saturating_sub(used_bytes);
                 let usage_percent = if total_bytes > 0 {
                     (used_bytes as f64 / total_bytes as f64) * 100.0

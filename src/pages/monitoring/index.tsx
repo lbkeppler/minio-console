@@ -1,22 +1,28 @@
 import { Loader2, RefreshCw } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { DiskUsage } from "@/pages/monitoring/disk-usage";
+import { ServerInfoCard } from "@/pages/monitoring/server-info-card";
 import { useMonitoringStore } from "@/stores/monitoring-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
-import { DiskUsage } from "@/pages/monitoring/disk-usage";
-import { ServerInfoCard } from "@/pages/monitoring/server-info-card";
 
 export function MonitoringPage() {
-	const { serverInfo, diskUsage, loadingServerInfo, loadingDiskUsage, loadServerInfo, loadDiskUsage } =
-		useMonitoringStore();
+	const {
+		serverInfo,
+		diskUsage,
+		loadingServerInfo,
+		loadingDiskUsage,
+		loadServerInfo,
+		loadDiskUsage,
+	} = useMonitoringStore();
 	const { config } = useProfileStore();
 	const { addToast } = useToastStore();
 
 	const hasActiveProfile = !!config?.active_profile_id;
 	const loading = loadingServerInfo || loadingDiskUsage;
 
-	const loadAll = () => {
+	const loadAll = useCallback(() => {
 		loadServerInfo().catch((err) => {
 			addToast({
 				title: "Error loading server info",
@@ -31,14 +37,13 @@ export function MonitoringPage() {
 				variant: "error",
 			});
 		});
-	};
+	}, [loadServerInfo, loadDiskUsage, addToast]);
 
 	useEffect(() => {
 		if (hasActiveProfile) {
 			loadAll();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasActiveProfile]);
+	}, [hasActiveProfile, loadAll]);
 
 	if (!hasActiveProfile) {
 		return (

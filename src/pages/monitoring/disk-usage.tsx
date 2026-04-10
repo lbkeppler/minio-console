@@ -6,7 +6,7 @@ function formatBytes(bytes: number): string {
 	const units = ["B", "KB", "MB", "GB", "TB"];
 	const i = Math.floor(Math.log(bytes) / Math.log(1024));
 	const index = Math.min(i, units.length - 1);
-	return `${(bytes / Math.pow(1024, index)).toFixed(1)} ${units[index]}`;
+	return `${(bytes / 1024 ** index).toFixed(1)} ${units[index]}`;
 }
 
 interface DiskUsageProps {
@@ -15,9 +15,7 @@ interface DiskUsageProps {
 
 export function DiskUsage({ disks }: DiskUsageProps) {
 	if (disks.length === 0) {
-		return (
-			<p className="text-[var(--color-text-secondary)]">No disk information available.</p>
-		);
+		return <p className="text-[var(--color-text-secondary)]">No disk information available.</p>;
 	}
 
 	return (

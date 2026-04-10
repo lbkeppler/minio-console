@@ -35,6 +35,7 @@ export function TerminalPage() {
 		}
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: scroll when history changes
 	useEffect(() => {
 		scrollToBottom();
 	}, [history, scrollToBottom]);
@@ -59,10 +60,7 @@ export function TerminalPage() {
 					{ command: trimmed, output: result.output, exit_code: result.exit_code },
 				]);
 			} catch (err) {
-				setHistory((prev) => [
-					...prev,
-					{ command: trimmed, output: String(err), exit_code: 1 },
-				]);
+				setHistory((prev) => [...prev, { command: trimmed, output: String(err), exit_code: 1 }]);
 			} finally {
 				setRunning(false);
 				inputRef.current?.focus();
@@ -125,21 +123,18 @@ export function TerminalPage() {
 			>
 				{history.length === 0 ? (
 					<p className="text-[var(--color-text-tertiary)]">
-						Type an mc command below and press Enter. Commands are executed
-						against the active server profile.
+						Type an mc command below and press Enter. Commands are executed against the active
+						server profile.
 						{"\n\n"}Examples: ls, admin info, version
 					</p>
 				) : (
 					history.map((entry, i) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: terminal history may have duplicate commands
 						<div key={`${i}-${entry.command}`} className="mb-3">
-							<div className="text-[var(--color-accent)]">
-								mc $ {entry.command}
-							</div>
+							<div className="text-[var(--color-accent)]">mc $ {entry.command}</div>
 							<pre
 								className={`mt-1 whitespace-pre-wrap ${
-									entry.exit_code === 0
-										? "text-green-400"
-										: "text-red-400"
+									entry.exit_code === 0 ? "text-green-400" : "text-red-400"
 								}`}
 							>
 								{entry.output}
@@ -156,9 +151,7 @@ export function TerminalPage() {
 			</div>
 
 			<form onSubmit={handleSubmit} className="flex items-center gap-2">
-				<span className="shrink-0 font-mono text-sm text-[var(--color-text-secondary)]">
-					mc $
-				</span>
+				<span className="shrink-0 font-mono text-sm text-[var(--color-text-secondary)]">mc $</span>
 				<Input
 					ref={inputRef}
 					value={command}
@@ -170,11 +163,7 @@ export function TerminalPage() {
 					autoFocus
 				/>
 				<Button type="submit" size="sm" disabled={running || !command.trim()}>
-					{running ? (
-						<Loader2 className="h-4 w-4 animate-spin" />
-					) : (
-						<Send className="h-4 w-4" />
-					)}
+					{running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
 				</Button>
 			</form>
 		</div>
