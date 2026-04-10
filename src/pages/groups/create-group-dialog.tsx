@@ -75,11 +75,7 @@ export function CreateGroupDialog({ open, onOpenChange }: CreateGroupDialogProps
 						<label htmlFor="group-members" className="text-sm font-medium">
 							Members
 						</label>
-						<Input
-							id="group-members"
-							placeholder="user1, user2, user3"
-							{...register("members")}
-						/>
+						<Input id="group-members" placeholder="user1, user2, user3" {...register("members")} />
 						<p className="text-xs text-[var(--color-text-tertiary)]">
 							Comma-separated list of user access keys.
 						</p>

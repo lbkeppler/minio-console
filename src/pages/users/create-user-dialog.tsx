@@ -77,9 +77,7 @@ export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) 
 						{errors.secretKey && (
 							<p className="text-xs text-[var(--color-danger)]">{errors.secretKey.message}</p>
 						)}
-						<p className="text-xs text-[var(--color-text-tertiary)]">
-							Minimum 8 characters.
-						</p>
+						<p className="text-xs text-[var(--color-text-tertiary)]">Minimum 8 characters.</p>
 					</div>
 					<div className="flex justify-end gap-2">
 						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>

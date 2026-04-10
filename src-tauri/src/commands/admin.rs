@@ -62,11 +62,19 @@ pub async fn delete_policy(name: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub async fn attach_policy(policy: String, user: Option<String>, group: Option<String>) -> Result<(), String> {
+pub async fn attach_policy(
+    policy: String,
+    user: Option<String>,
+    group: Option<String>,
+) -> Result<(), String> {
     admin::attach_policy(&policy, user.as_deref(), group.as_deref()).await
 }
 
 #[tauri::command]
-pub async fn detach_policy(policy: String, user: Option<String>, group: Option<String>) -> Result<(), String> {
+pub async fn detach_policy(
+    policy: String,
+    user: Option<String>,
+    group: Option<String>,
+) -> Result<(), String> {
     admin::detach_policy(&policy, user.as_deref(), group.as_deref()).await
 }

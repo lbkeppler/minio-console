@@ -2,7 +2,9 @@ use std::process::Stdio;
 use tokio::process::Command;
 
 pub async fn run_mc(args: &[&str]) -> Result<String, String> {
-    let mc_path = find_mc().ok_or("mc (MinIO Client) not found in PATH. Please install mc and ensure it's in your PATH.")?;
+    let mc_path = find_mc().ok_or(
+        "mc (MinIO Client) not found in PATH. Please install mc and ensure it's in your PATH.",
+    )?;
 
     let output = Command::new(&mc_path)
         .args(args)
@@ -17,7 +19,11 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
 
     if !output.status.success() {
         if let Ok(json) = serde_json::from_str::<serde_json::Value>(&stdout) {
-            if let Some(msg) = json.get("error").and_then(|e| e.get("message")).and_then(|m| m.as_str()) {
+            if let Some(msg) = json
+                .get("error")
+                .and_then(|e| e.get("message"))
+                .and_then(|m| m.as_str())
+            {
                 return Err(msg.to_string());
             }
         }

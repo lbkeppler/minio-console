@@ -1,6 +1,6 @@
-use crate::models::{GroupInfo, PolicyInfo, UserInfo};
 use super::alias;
 use super::runner;
+use crate::models::{GroupInfo, PolicyInfo, UserInfo};
 
 // ── Users ──────────────────────────────────────────────────────────
 
@@ -11,13 +11,25 @@ pub async fn list_users() -> Result<Vec<UserInfo>, String> {
     let mut users = Vec::new();
     for line in output.lines() {
         let line = line.trim();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
         if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
             if let Some(access_key) = val.get("accessKey").and_then(|v| v.as_str()) {
-                let status = val.get("userStatus").and_then(|v| v.as_str()).unwrap_or("enabled").to_string();
-                let policies = val.get("policyName")
+                let status = val
+                    .get("userStatus")
                     .and_then(|v| v.as_str())
-                    .map(|p| p.split(',').map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect())
+                    .unwrap_or("enabled")
+                    .to_string();
+                let policies = val
+                    .get("policyName")
+                    .and_then(|v| v.as_str())
+                    .map(|p| {
+                        p.split(',')
+                            .map(|s| s.trim().to_string())
+                            .filter(|s| !s.is_empty())
+                            .collect()
+                    })
                     .unwrap_or_default();
                 users.push(UserInfo {
                     access_key: access_key.to_string(),
@@ -51,7 +63,9 @@ pub async fn list_groups() -> Result<Vec<GroupInfo>, String> {
     let mut group_names = Vec::new();
     for line in output.lines() {
         let line = line.trim();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
         if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
             if let Some(groups) = val.get("groups").and_then(|v| v.as_array()) {
                 for g in groups {
@@ -72,16 +86,25 @@ pub async fn list_groups() -> Result<Vec<GroupInfo>, String> {
 
         for line in info_output.lines() {
             let line = line.trim();
-            if line.is_empty() { continue; }
+            if line.is_empty() {
+                continue;
+            }
             if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
                 if let Some(m) = val.get("members").and_then(|v| v.as_array()) {
-                    members = m.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect();
+                    members = m
+                        .iter()
+                        .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                        .collect();
                 }
                 if let Some(s) = val.get("groupStatus").and_then(|v| v.as_str()) {
                     status = s.to_string();
                 }
                 if let Some(p) = val.get("groupPolicy").and_then(|v| v.as_str()) {
-                    policies = p.split(',').map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect();
+                    policies = p
+                        .split(',')
+                        .map(|s| s.trim().to_string())
+                        .filter(|s| !s.is_empty())
+                        .collect();
                 }
             }
         }
@@ -142,7 +165,9 @@ pub async fn list_policies() -> Result<Vec<PolicyInfo>, String> {
     let mut policies = Vec::new();
     for line in output.lines() {
         let line = line.trim();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
         if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
             if let Some(name) = val.get("policy").and_then(|v| v.as_str()) {
                 policies.push(PolicyInfo {
@@ -161,9 +186,12 @@ pub async fn get_policy(name: &str) -> Result<PolicyInfo, String> {
 
     for line in output.lines() {
         let line = line.trim();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
         if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
-            let policy_json = val.get("policyJSON")
+            let policy_json = val
+                .get("policyJSON")
                 .map(|v| v.to_string())
                 .or_else(|| val.get("policyInfo").map(|v| v.to_string()))
                 .unwrap_or_default();
@@ -199,7 +227,11 @@ pub async fn delete_policy(name: &str) -> Result<(), String> {
     Ok(())
 }
 
-pub async fn attach_policy(policy: &str, user: Option<&str>, group: Option<&str>) -> Result<(), String> {
+pub async fn attach_policy(
+    policy: &str,
+    user: Option<&str>,
+    group: Option<&str>,
+) -> Result<(), String> {
     let al = alias::ensure_alias().await?;
 
     if let Some(u) = user {
@@ -221,7 +253,11 @@ pub async fn attach_policy(policy: &str, user: Option<&str>, group: Option<&str>
     Ok(())
 }
 
-pub async fn detach_policy(policy: &str, user: Option<&str>, group: Option<&str>) -> Result<(), String> {
+pub async fn detach_policy(
+    policy: &str,
+    user: Option<&str>,
+    group: Option<&str>,
+) -> Result<(), String> {
     let al = alias::ensure_alias().await?;
 
     if let Some(u) = user {

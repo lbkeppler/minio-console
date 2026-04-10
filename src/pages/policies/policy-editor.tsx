@@ -99,11 +99,7 @@ export function PolicyEditorPage() {
 					</h1>
 				</div>
 				<Button onClick={handleSave} disabled={saving || loading} size="sm">
-					{saving ? (
-						<Loader2 className="h-4 w-4 animate-spin" />
-					) : (
-						<Save className="h-4 w-4" />
-					)}
+					{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
 					Save
 				</Button>
 			</div>

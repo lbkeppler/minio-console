@@ -73,7 +73,11 @@ export function GroupMembersDialog({ group, open, onOpenChange }: GroupMembersDi
 							}}
 						/>
 						<Button size="icon" onClick={handleAdd} disabled={loading || !newMember.trim()}>
-							{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+							{loading ? (
+								<Loader2 className="h-4 w-4 animate-spin" />
+							) : (
+								<Plus className="h-4 w-4" />
+							)}
 						</Button>
 					</div>
 					<div className="max-h-64 space-y-1 overflow-y-auto">

@@ -34,10 +34,7 @@ const columns: ColumnDef<UserInfo, string>[] = [
 		cell: ({ row }) => (
 			<div className="flex flex-wrap gap-1">
 				{row.original.policies.map((p) => (
-					<span
-						key={p}
-						className="rounded bg-[var(--color-bg-tertiary)] px-1.5 py-0.5 text-xs"
-					>
+					<span key={p} className="rounded bg-[var(--color-bg-tertiary)] px-1.5 py-0.5 text-xs">
 						{p}
 					</span>
 				))}
