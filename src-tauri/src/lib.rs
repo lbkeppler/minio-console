@@ -16,6 +16,15 @@ pub fn run() {
             commands::profiles::delete_profile,
             commands::profiles::set_active_profile,
             commands::connection::test_connection,
+            commands::buckets::list_buckets,
+            commands::buckets::create_bucket,
+            commands::buckets::delete_bucket,
+            commands::objects::list_objects,
+            commands::objects::delete_object,
+            commands::objects::delete_objects,
+            commands::objects::get_presigned_url,
+            commands::objects::upload_object,
+            commands::objects::download_object,
         ])
         .setup(|app| {
             #[cfg(debug_assertions)]
