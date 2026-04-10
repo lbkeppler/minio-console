@@ -1,16 +1,16 @@
-import { useLocation, Link } from "react-router-dom";
 import {
+	Activity,
 	Database,
 	FolderOpen,
+	PanelLeft,
+	PanelLeftClose,
+	Settings,
+	Shield,
+	Terminal,
 	Users,
 	UsersRound,
-	Shield,
-	Activity,
-	Terminal,
-	Settings,
-	PanelLeftClose,
-	PanelLeft,
 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebar-store";
 
@@ -40,6 +40,7 @@ export function Sidebar() {
 					<span className="text-sm font-semibold text-[var(--color-text)]">MinIO</span>
 				)}
 				<button
+					type="button"
 					onClick={toggle}
 					className="rounded-md p-1.5 hover:bg-[var(--color-bg-tertiary)]"
 				>

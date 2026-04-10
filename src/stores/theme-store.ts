@@ -10,9 +10,7 @@ interface ThemeStore {
 function applyTheme(theme: Theme) {
 	const root = document.documentElement;
 	if (theme === "system") {
-		const prefersDark = window.matchMedia(
-			"(prefers-color-scheme: dark)",
-		).matches;
+		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 		root.classList.toggle("dark", prefersDark);
 	} else {
 		root.classList.toggle("dark", theme === "dark");
@@ -30,10 +28,8 @@ export const useThemeStore = create<ThemeStore>((set) => ({
 
 applyTheme(useThemeStore.getState().theme);
 
-window
-	.matchMedia("(prefers-color-scheme: dark)")
-	.addEventListener("change", () => {
-		if (useThemeStore.getState().theme === "system") {
-			applyTheme("system");
-		}
-	});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+	if (useThemeStore.getState().theme === "system") {
+		applyTheme("system");
+	}
+});

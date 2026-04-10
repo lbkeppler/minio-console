@@ -1,5 +1,5 @@
+import { AlertCircle, CheckCircle, Info, X } from "lucide-react";
 import { useEffect } from "react";
-import { X, CheckCircle, AlertCircle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface ToastData {
@@ -24,13 +24,7 @@ const variantStyles = {
 	warning: "border-[var(--color-warning)]",
 };
 
-export function Toast({
-	toast,
-	onDismiss,
-}: {
-	toast: ToastData;
-	onDismiss: (id: string) => void;
-}) {
+export function Toast({ toast, onDismiss }: { toast: ToastData; onDismiss: (id: string) => void }) {
 	const variant = toast.variant ?? "default";
 	const Icon = icons[variant];
 
@@ -52,12 +46,11 @@ export function Toast({
 			<div className="flex-1">
 				<p className="text-sm font-medium">{toast.title}</p>
 				{toast.description && (
-					<p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-						{toast.description}
-					</p>
+					<p className="mt-1 text-xs text-[var(--color-text-secondary)]">{toast.description}</p>
 				)}
 			</div>
 			<button
+				type="button"
 				onClick={() => onDismiss(toast.id)}
 				className="shrink-0 rounded-sm opacity-70 hover:opacity-100"
 			>

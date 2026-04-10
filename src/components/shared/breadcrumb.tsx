@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export function Breadcrumb() {
 	const location = useLocation();

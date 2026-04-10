@@ -1,10 +1,10 @@
+import { Pencil, Plus, Server, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useProfileStore, type ServerProfile } from "@/stores/profile-store";
-import { useToastStore } from "@/stores/toast-store";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { type ServerProfile, useProfileStore } from "@/stores/profile-store";
+import { useToastStore } from "@/stores/toast-store";
 import { ProfileForm } from "./profile-form";
-import { Plus, Pencil, Trash2, Server } from "lucide-react";
 
 export function SettingsPage() {
 	const { config, deleteProfile, setActiveProfile } = useProfileStore();
@@ -35,7 +35,11 @@ export function SettingsPage() {
 		try {
 			await setActiveProfile(id);
 		} catch (err) {
-			addToast({ title: "Error setting active profile", description: String(err), variant: "error" });
+			addToast({
+				title: "Error setting active profile",
+				description: String(err),
+				variant: "error",
+			});
 		}
 	}
 
@@ -73,6 +77,7 @@ export function SettingsPage() {
 							}`}
 						>
 							<button
+								type="button"
 								onClick={() => handleSetActive(profile.id)}
 								className="flex flex-1 items-center gap-3 text-left"
 							>
@@ -83,25 +88,15 @@ export function SettingsPage() {
 								/>
 								<div>
 									<p className="text-sm font-medium">{profile.alias}</p>
-									<p className="text-xs text-[var(--color-text-secondary)]">
-										{profile.endpoint}
-									</p>
+									<p className="text-xs text-[var(--color-text-secondary)]">{profile.endpoint}</p>
 								</div>
 							</button>
 
 							<div className="flex items-center gap-1">
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => handleEdit(profile)}
-								>
+								<Button variant="ghost" size="icon" onClick={() => handleEdit(profile)}>
 									<Pencil className="h-4 w-4" />
 								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => handleDelete(profile)}
-								>
+								<Button variant="ghost" size="icon" onClick={() => handleDelete(profile)}>
 									<Trash2 className="h-4 w-4 text-[var(--color-danger)]" />
 								</Button>
 							</div>
@@ -113,14 +108,9 @@ export function SettingsPage() {
 			<Dialog open={formOpen} onOpenChange={setFormOpen}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>
-							{editingProfile ? "Edit Profile" : "New Profile"}
-						</DialogTitle>
+						<DialogTitle>{editingProfile ? "Edit Profile" : "New Profile"}</DialogTitle>
 					</DialogHeader>
-					<ProfileForm
-						profile={editingProfile}
-						onClose={() => setFormOpen(false)}
-					/>
+					<ProfileForm profile={editingProfile} onClose={() => setFormOpen(false)} />
 				</DialogContent>
 			</Dialog>
 		</div>

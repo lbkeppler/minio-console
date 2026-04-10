@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { invoke } from "@tauri-apps/api/core";
+import { create } from "zustand";
 
 export interface ServerProfile {
 	id: string;
@@ -70,14 +70,7 @@ export const useProfileStore = create<ProfileStore>((set) => ({
 		});
 		set({ config });
 	},
-	updateProfile: async (
-		id,
-		alias,
-		endpoint,
-		accessKey,
-		secretKey,
-		useSsl,
-	) => {
+	updateProfile: async (id, alias, endpoint, accessKey, secretKey, useSsl) => {
 		const config = await invoke<AppConfig>("update_profile", {
 			id,
 			alias,

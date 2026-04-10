@@ -1,22 +1,20 @@
-import { Search, Sun, Moon, Monitor } from "lucide-react";
-import { useProfileStore } from "@/stores/profile-store";
-import { useThemeStore } from "@/stores/theme-store";
+import { Monitor, Moon, Search, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuTrigger,
 	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useProfileStore } from "@/stores/profile-store";
+import { useThemeStore } from "@/stores/theme-store";
 
 export function Header() {
 	const { config, setActiveProfile } = useProfileStore();
 	const { theme, setTheme } = useThemeStore();
 
-	const activeProfile = config?.profiles.find(
-		(p) => p.id === config.active_profile_id,
-	);
+	const activeProfile = config?.profiles.find((p) => p.id === config.active_profile_id);
 
 	const themeIcon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
 	const ThemeIcon = themeIcon;
@@ -32,10 +30,7 @@ export function Header() {
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="start">
 						{config?.profiles.map((profile) => (
-							<DropdownMenuItem
-								key={profile.id}
-								onClick={() => setActiveProfile(profile.id)}
-							>
+							<DropdownMenuItem key={profile.id} onClick={() => setActiveProfile(profile.id)}>
 								<span className="flex-1">{profile.alias}</span>
 								{profile.id === config.active_profile_id && (
 									<span className="ml-2 text-xs text-[var(--color-accent)]">active</span>

@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useProfileStore, type ServerProfile } from "@/stores/profile-store";
+import { type ServerProfile, useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
-import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 const profileSchema = z.object({
 	alias: z.string().min(1, "Alias is required"),
@@ -61,13 +61,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 				);
 				addToast({ title: "Profile updated", variant: "success" });
 			} else {
-				await addProfile(
-					data.alias,
-					data.endpoint,
-					data.accessKey,
-					data.secretKey,
-					data.useSsl,
-				);
+				await addProfile(data.alias, data.endpoint, data.accessKey, data.secretKey, data.useSsl);
 				addToast({ title: "Profile created", variant: "success" });
 			}
 			onClose();
@@ -105,34 +99,44 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<div className="space-y-2">
-				<label className="text-sm font-medium">Alias</label>
-				<Input placeholder="e.g., local, production" {...register("alias")} />
+				<label className="text-sm font-medium" htmlFor="alias">
+					Alias
+				</label>
+				<Input id="alias" placeholder="e.g., local, production" {...register("alias")} />
 				{errors.alias && (
 					<p className="text-xs text-[var(--color-danger)]">{errors.alias.message}</p>
 				)}
 			</div>
 
 			<div className="space-y-2">
-				<label className="text-sm font-medium">Endpoint</label>
-				<Input placeholder="e.g., localhost:9000 or minio.example.com" {...register("endpoint")} />
+				<label className="text-sm font-medium" htmlFor="endpoint">
+					Endpoint
+				</label>
+				<Input
+					id="endpoint"
+					placeholder="e.g., localhost:9000 or minio.example.com"
+					{...register("endpoint")}
+				/>
 				{errors.endpoint && (
 					<p className="text-xs text-[var(--color-danger)]">{errors.endpoint.message}</p>
 				)}
 			</div>
 
 			<div className="space-y-2">
-				<label className="text-sm font-medium">Access Key</label>
-				<Input placeholder="Access key" {...register("accessKey")} />
+				<label className="text-sm font-medium" htmlFor="accessKey">
+					Access Key
+				</label>
+				<Input id="accessKey" placeholder="Access key" {...register("accessKey")} />
 				{errors.accessKey && (
 					<p className="text-xs text-[var(--color-danger)]">{errors.accessKey.message}</p>
 				)}
 			</div>
 
 			<div className="space-y-2">
-				<label className="text-sm font-medium">
+				<label className="text-sm font-medium" htmlFor="secretKey">
 					Secret Key {profile && "(leave blank to keep current)"}
 				</label>
-				<Input type="password" placeholder="Secret key" {...register("secretKey")} />
+				<Input id="secretKey" type="password" placeholder="Secret key" {...register("secretKey")} />
 				{errors.secretKey && (
 					<p className="text-xs text-[var(--color-danger)]">{errors.secretKey.message}</p>
 				)}

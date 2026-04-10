@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "./sidebar";
-import { Header } from "./header";
-import { Footer } from "./footer";
 import { Breadcrumb } from "@/components/shared/breadcrumb";
 import { ToastContainer } from "@/components/ui/toast";
 import { useToastStore } from "@/stores/toast-store";
+import { Footer } from "./footer";
+import { Header } from "./header";
+import { Sidebar } from "./sidebar";
 
 export function AppLayout() {
 	const { toasts, dismissToast } = useToastStore();
