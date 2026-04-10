@@ -1,5 +1,6 @@
 import { Pencil, Plus, Server, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type ServerProfile, useProfileStore } from "@/stores/profile-store";
@@ -9,6 +10,7 @@ import { ProfileForm } from "./profile-form";
 export function SettingsPage() {
 	const { config, deleteProfile, setActiveProfile } = useProfileStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [formOpen, setFormOpen] = useState(false);
 	const [editingProfile, setEditingProfile] = useState<ServerProfile | undefined>();
 
@@ -46,9 +48,9 @@ export function SettingsPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">Server Profiles</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.settings.profiles")}</h1>
 				<Button onClick={handleCreate} size="sm">
-					<Plus className="h-4 w-4" /> Add Profile
+					<Plus className="h-4 w-4" /> {t("pages.settings.addProfile")}
 				</Button>
 			</div>
 
@@ -56,10 +58,10 @@ export function SettingsPage() {
 				<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[var(--color-border)] py-12">
 					<Server className="mb-4 h-10 w-10 text-[var(--color-text-tertiary)]" />
 					<p className="text-sm text-[var(--color-text-secondary)]">
-						No server profiles configured yet.
+						{t("pages.settings.noProfiles")}
 					</p>
 					<Button onClick={handleCreate} variant="outline" size="sm" className="mt-4">
-						<Plus className="h-4 w-4" /> Add your first profile
+						<Plus className="h-4 w-4" /> {t("pages.settings.addFirstProfile")}
 					</Button>
 				</div>
 			)}
@@ -108,7 +110,7 @@ export function SettingsPage() {
 			<Dialog open={formOpen} onOpenChange={setFormOpen}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>{editingProfile ? "Edit Profile" : "New Profile"}</DialogTitle>
+						<DialogTitle>{editingProfile ? t("pages.settings.editProfile") : t("pages.settings.newProfile")}</DialogTitle>
 					</DialogHeader>
 					<ProfileForm profile={editingProfile} onClose={() => setFormOpen(false)} />
 				</DialogContent>

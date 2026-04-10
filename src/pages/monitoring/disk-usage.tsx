@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Progress } from "@/components/ui/progress";
 import type { DiskInfo } from "@/stores/monitoring-store";
 
@@ -14,8 +15,10 @@ interface DiskUsageProps {
 }
 
 export function DiskUsage({ disks }: DiskUsageProps) {
+	const { t } = useTranslation();
+
 	if (disks.length === 0) {
-		return <p className="text-[var(--color-text-secondary)]">No disk information available.</p>;
+		return <p className="text-[var(--color-text-secondary)]">{t("pages.monitoring.noDiskInfo")}</p>;
 	}
 
 	return (
@@ -36,7 +39,7 @@ export function DiskUsage({ disks }: DiskUsageProps) {
 						<span>
 							{formatBytes(disk.used_bytes)} / {formatBytes(disk.total_bytes)}
 						</span>
-						<span>{formatBytes(disk.available_bytes)} free</span>
+						<span>{formatBytes(disk.available_bytes)} {t("common.free")}</span>
 					</div>
 				</div>
 			))}

@@ -35,7 +35,22 @@
 		"next": "Próximo",
 		"refresh": "Atualizar",
 		"download": "Baixar",
-		"upload": "Enviar"
+		"upload": "Enviar",
+		"continue": "Continuar",
+		"add": "Adicionar",
+		"remove": "Remover",
+		"update": "Atualizar",
+		"suspend": "Suspender",
+		"enable": "Ativar",
+		"running": "Executando...",
+		"created": "Criado",
+		"online": "online",
+		"offline": "offline",
+		"free": "livre",
+		"prefix": "Prefixo",
+		"expirationDays": "Dias para Expiração",
+		"testConnection": "Testar Conexão",
+		"useSsl": "Usar SSL/TLS"
 	},
 	"header": {
 		"noServerSelected": "Nenhum servidor selecionado",
@@ -59,6 +74,7 @@
 	"pages": {
 		"dashboard": {
 			"title": "Painel",
+			"description": "Selecione um perfil de servidor para começar, ou adicione um em Configurações.",
 			"totalBuckets": "Total de Buckets",
 			"totalObjects": "Total de Objetos",
 			"storageUsed": "Armazenamento Usado",
@@ -69,19 +85,34 @@
 			"createBucket": "Criar Bucket",
 			"deleteBucket": "Excluir Bucket",
 			"bucketName": "Nome do Bucket",
+			"bucketNameHint": "Letras minúsculas, números, hifens e pontos. 3-63 caracteres.",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para ver os buckets.",
 			"versioning": "Versionamento",
 			"objectLocking": "Bloqueio de Objetos",
 			"quota": "Cota",
 			"replication": "Replicação",
 			"lifecycle": "Ciclo de Vida",
+			"lifecycleRules": "Regras de Ciclo de Vida",
+			"addRule": "Adicionar Regra",
+			"ruleId": "ID da Regra",
+			"noLifecycleRules": "Nenhuma regra de ciclo de vida configurada.",
+			"prefixHint": "Opcional. Filtrar objetos por prefixo da chave.",
 			"accessPolicy": "Política de Acesso",
+			"bucketPolicy": "Política do Bucket",
+			"savePolicy": "Salvar Política",
+			"policyPlaceholder": "Cole a política JSON aqui, ou deixe vazio e salve para excluir",
 			"encryption": "Criptografia",
 			"tags": "Tags",
-			"events": "Eventos"
+			"events": "Eventos",
+			"settings": "Configurações",
+			"noBucketSpecified": "Nenhum bucket especificado."
 		},
 		"objects": {
 			"title": "Objetos",
 			"uploadObject": "Enviar Objeto",
+			"uploadFiles": "Enviar Arquivos",
+			"uploadTo": "Enviar para:",
+			"selectFiles": "Selecionar Arquivos",
 			"deleteObject": "Excluir Objeto",
 			"objectName": "Nome do Objeto",
 			"lastModified": "Última Modificação",
@@ -90,7 +121,11 @@
 			"preview": "Visualizar",
 			"metadata": "Metadados",
 			"share": "Compartilhar",
-			"shareLink": "Link de Compartilhamento"
+			"shareLink": "Link de Compartilhamento",
+			"copyPresignedUrl": "Copiar URL Pré-assinada",
+			"selectBucketFirst": "Selecione um bucket na página de Buckets para navegar nos objetos.",
+			"binaryFileHint": "Arquivo binário, baixe para visualizar",
+			"searchByPrefix": "Buscar por prefixo..."
 		},
 		"users": {
 			"title": "Usuários",
@@ -98,9 +133,14 @@
 			"deleteUser": "Excluir Usuário",
 			"accessKey": "Chave de Acesso",
 			"secretKey": "Chave Secreta",
+			"secretKeyHint": "Mínimo de 8 caracteres.",
+			"secretKeyKeep": "Chave Secreta (deixe em branco para manter a atual)",
 			"userStatus": "Status do Usuário",
 			"assignedPolicies": "Políticas Atribuídas",
-			"memberOfGroups": "Membro dos Grupos"
+			"memberOfGroups": "Membro dos Grupos",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para ver os usuários.",
+			"selectPolicy": "Selecione uma política...",
+			"noPoliciesAttached": "Nenhuma política atribuída."
 		},
 		"groups": {
 			"title": "Grupos",
@@ -108,7 +148,12 @@
 			"deleteGroup": "Excluir Grupo",
 			"groupName": "Nome do Grupo",
 			"members": "Membros",
-			"groupPolicies": "Políticas do Grupo"
+			"membersOf": "Membros de \"{{name}}\"",
+			"addMember": "Adicionar membro...",
+			"noMembers": "Nenhum membro ainda.",
+			"membersHint": "Lista separada por vírgulas de chaves de acesso dos usuários.",
+			"groupPolicies": "Políticas do Grupo",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para ver os grupos."
 		},
 		"policies": {
 			"title": "Políticas",
@@ -117,7 +162,9 @@
 			"policyName": "Nome da Política",
 			"policyDocument": "Documento da Política",
 			"builtIn": "Nativa",
-			"custom": "Personalizada"
+			"custom": "Personalizada",
+			"editPolicy": "Editar Política",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para ver as políticas."
 		},
 		"monitoring": {
 			"title": "Monitoramento",
@@ -126,13 +173,21 @@
 			"audit": "Log de Auditoria",
 			"healthCheck": "Verificação de Saúde",
 			"drives": "Discos",
-			"network": "Rede"
+			"network": "Rede",
+			"version": "Versão",
+			"uptime": "Tempo Ativo",
+			"diskUsage": "Uso de Disco",
+			"loadingDiskUsage": "Carregando uso de disco...",
+			"noDiskInfo": "Nenhuma informação de disco disponível.",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para ver os dados de monitoramento."
 		},
 		"terminal": {
 			"title": "Terminal MC",
-			"placeholder": "Digite um comando...",
+			"placeholder": "Digite um comando... (Tab para autocompletar)",
+			"helpText": "Digite um comando mc abaixo e pressione Enter. Os comandos são executados no perfil de servidor ativo.\n\nExemplos: ls, admin info, admin user list\nUse Tab para autocompletar comandos.",
 			"clear": "Limpar",
-			"history": "Histórico"
+			"history": "Histórico",
+			"selectProfileFirst": "Selecione um perfil de servidor primeiro para usar o terminal."
 		},
 		"settings": {
 			"title": "Configurações",
@@ -140,12 +195,31 @@
 			"addProfile": "Adicionar Perfil",
 			"editProfile": "Editar Perfil",
 			"deleteProfile": "Excluir Perfil",
+			"newProfile": "Novo Perfil",
+			"addFirstProfile": "Adicione seu primeiro perfil",
+			"noProfiles": "Nenhum perfil de servidor configurado ainda.",
 			"alias": "Alias",
 			"endpoint": "Endpoint",
 			"appearance": "Aparência",
 			"general": "Geral",
 			"about": "Sobre"
 		}
+	},
+	"validation": {
+		"bucketNameMin": "O nome do bucket deve ter pelo menos 3 caracteres",
+		"bucketNameMax": "O nome do bucket deve ter no máximo 63 caracteres",
+		"bucketNamePattern": "O nome do bucket deve ser minúsculo, começar/terminar com letra ou número",
+		"ruleIdRequired": "O ID da regra é obrigatório",
+		"minOneDay": "Deve ser pelo menos 1 dia",
+		"accessKeyMin": "A chave de acesso deve ter pelo menos 3 caracteres",
+		"secretKeyMin": "A chave secreta deve ter pelo menos 8 caracteres",
+		"groupNameRequired": "O nome do grupo é obrigatório",
+		"aliasRequired": "O alias é obrigatório",
+		"endpointRequired": "O endpoint é obrigatório",
+		"accessKeyRequired": "A chave de acesso é obrigatória",
+		"secretKeyRequired": "A chave secreta é obrigatória",
+		"invalidJson": "JSON inválido",
+		"fixJsonSyntax": "Corrija a sintaxe do JSON antes de salvar."
 	},
 	"errors": {
 		"generic": "Ocorreu um erro. Tente novamente.",

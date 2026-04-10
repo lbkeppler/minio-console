@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, Pencil, Plus, Shield, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -19,6 +20,7 @@ export function PoliciesPage() {
 	const { policies, loadingPolicies, loadPolicies, deletePolicy } = useAdminStore();
 	const { config } = useProfileStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [createOpen, setCreateOpen] = useState(false);
 	const [newName, setNewName] = useState("");
@@ -40,9 +42,9 @@ export function PoliciesPage() {
 	if (!hasActiveProfile) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">Policies</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.policies.title")}</h1>
 				<p className="text-[var(--color-text-secondary)]">
-					Select a server profile first to view policies.
+					{t("pages.policies.selectProfileFirst")}
 				</p>
 			</div>
 		);
@@ -72,7 +74,7 @@ export function PoliciesPage() {
 	const columns: ColumnDef<PolicyInfo, string>[] = [
 		{
 			accessorKey: "name",
-			header: "Name",
+			header: t("common.name"),
 			cell: ({ row }) => (
 				<div className="flex items-center gap-2">
 					<Shield className="h-4 w-4 text-[var(--color-accent)]" />
@@ -113,13 +115,13 @@ export function PoliciesPage() {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">Policies</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.policies.title")}</h1>
 				<div className="flex items-center gap-2">
 					{loadingPolicies && (
 						<Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />
 					)}
 					<Button onClick={() => setCreateOpen(true)} size="sm">
-						<Plus className="h-4 w-4" /> Create Policy
+						<Plus className="h-4 w-4" /> {t("pages.policies.createPolicy")}
 					</Button>
 				</div>
 			</div>
@@ -129,7 +131,7 @@ export function PoliciesPage() {
 			<Dialog open={createOpen} onOpenChange={setCreateOpen}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Create Policy</DialogTitle>
+						<DialogTitle>{t("pages.policies.createPolicy")}</DialogTitle>
 					</DialogHeader>
 					<form
 						onSubmit={(e) => {
@@ -140,7 +142,7 @@ export function PoliciesPage() {
 					>
 						<div>
 							<label htmlFor="policy-name" className="mb-1 block text-sm font-medium">
-								Policy Name
+								{t("pages.policies.policyName")}
 							</label>
 							<input
 								id="policy-name"
@@ -155,11 +157,11 @@ export function PoliciesPage() {
 						<div className="flex justify-end gap-2">
 							<DialogClose asChild>
 								<Button type="button" variant="outline">
-									Cancel
+									{t("common.cancel")}
 								</Button>
 							</DialogClose>
 							<Button type="submit" disabled={!newName.trim()}>
-								Continue
+								{t("common.continue")}
 							</Button>
 						</div>
 					</form>

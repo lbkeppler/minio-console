@@ -1,19 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useAdminStore } from "@/stores/admin-store";
 import { useToastStore } from "@/stores/toast-store";
-
-const userSchema = z.object({
-	accessKey: z.string().min(3, "Access key must be at least 3 characters"),
-	secretKey: z.string().min(8, "Secret key must be at least 8 characters"),
-});
-
-type UserFormData = z.infer<typeof userSchema>;
 
 interface CreateUserDialogProps {
 	open: boolean;
@@ -23,6 +17,14 @@ interface CreateUserDialogProps {
 export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) {
 	const { createUser } = useAdminStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
+
+	const userSchema = z.object({
+		accessKey: z.string().min(3, t("validation.accessKeyMin")),
+		secretKey: z.string().min(8, t("validation.secretKeyMin")),
+	});
+
+	type UserFormData = z.infer<typeof userSchema>;
 
 	const {
 		register,
@@ -52,12 +54,12 @@ export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) 
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Create User</DialogTitle>
+					<DialogTitle>{t("pages.users.createUser")}</DialogTitle>
 				</DialogHeader>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 					<div className="space-y-2">
 						<label htmlFor="access-key" className="text-sm font-medium">
-							Access Key
+							{t("pages.users.accessKey")}
 						</label>
 						<Input id="access-key" placeholder="minio-user" {...register("accessKey")} />
 						{errors.accessKey && (
@@ -66,7 +68,7 @@ export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) 
 					</div>
 					<div className="space-y-2">
 						<label htmlFor="secret-key" className="text-sm font-medium">
-							Secret Key
+							{t("pages.users.secretKey")}
 						</label>
 						<Input
 							id="secret-key"
@@ -77,15 +79,15 @@ export function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) 
 						{errors.secretKey && (
 							<p className="text-xs text-[var(--color-danger)]">{errors.secretKey.message}</p>
 						)}
-						<p className="text-xs text-[var(--color-text-tertiary)]">Minimum 8 characters.</p>
+						<p className="text-xs text-[var(--color-text-tertiary)]">{t("pages.users.secretKeyHint")}</p>
 					</div>
 					<div className="flex justify-end gap-2">
 						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button type="submit" disabled={isSubmitting}>
 							{isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-							Create
+							{t("common.create")}
 						</Button>
 					</div>
 				</form>

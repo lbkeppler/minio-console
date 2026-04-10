@@ -1,5 +1,6 @@
 import { Loader2, RefreshCw } from "lucide-react";
 import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { DiskUsage } from "@/pages/monitoring/disk-usage";
 import { ServerInfoCard } from "@/pages/monitoring/server-info-card";
@@ -18,6 +19,7 @@ export function MonitoringPage() {
 	} = useMonitoringStore();
 	const { config } = useProfileStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 
 	const hasActiveProfile = !!config?.active_profile_id;
 	const loading = loadingServerInfo || loadingDiskUsage;
@@ -48,9 +50,9 @@ export function MonitoringPage() {
 	if (!hasActiveProfile) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">Monitoring</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.monitoring.title")}</h1>
 				<p className="text-[var(--color-text-secondary)]">
-					Select a server profile first to view monitoring data.
+					{t("pages.monitoring.selectProfileFirst")}
 				</p>
 			</div>
 		);
@@ -59,21 +61,21 @@ export function MonitoringPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">Monitoring</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.monitoring.title")}</h1>
 				<Button variant="outline" size="sm" onClick={loadAll} disabled={loading}>
 					{loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
-					<span className="ml-2">Refresh</span>
+					<span className="ml-2">{t("common.refresh")}</span>
 				</Button>
 			</div>
 
 			{serverInfo && <ServerInfoCard info={serverInfo} />}
 
 			<div className="space-y-4">
-				<h2 className="text-lg font-semibold">Disk Usage</h2>
+				<h2 className="text-lg font-semibold">{t("pages.monitoring.diskUsage")}</h2>
 				{loadingDiskUsage ? (
 					<div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
 						<Loader2 size={16} className="animate-spin" />
-						Loading disk usage...
+						{t("pages.monitoring.loadingDiskUsage")}
 					</div>
 				) : (
 					<DiskUsage disks={diskUsage} />

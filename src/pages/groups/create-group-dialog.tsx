@@ -1,19 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useAdminStore } from "@/stores/admin-store";
 import { useToastStore } from "@/stores/toast-store";
-
-const groupSchema = z.object({
-	name: z.string().min(1, "Group name is required"),
-	members: z.string().optional(),
-});
-
-type GroupFormData = z.infer<typeof groupSchema>;
 
 interface CreateGroupDialogProps {
 	open: boolean;
@@ -23,6 +17,14 @@ interface CreateGroupDialogProps {
 export function CreateGroupDialog({ open, onOpenChange }: CreateGroupDialogProps) {
 	const { createGroup, addGroupMembers } = useAdminStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
+
+	const groupSchema = z.object({
+		name: z.string().min(1, t("validation.groupNameRequired")),
+		members: z.string().optional(),
+	});
+
+	type GroupFormData = z.infer<typeof groupSchema>;
 
 	const {
 		register,
@@ -59,12 +61,12 @@ export function CreateGroupDialog({ open, onOpenChange }: CreateGroupDialogProps
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Create Group</DialogTitle>
+					<DialogTitle>{t("pages.groups.createGroup")}</DialogTitle>
 				</DialogHeader>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 					<div className="space-y-2">
 						<label htmlFor="group-name" className="text-sm font-medium">
-							Group Name
+							{t("pages.groups.groupName")}
 						</label>
 						<Input id="group-name" placeholder="my-group" {...register("name")} />
 						{errors.name && (
@@ -73,20 +75,20 @@ export function CreateGroupDialog({ open, onOpenChange }: CreateGroupDialogProps
 					</div>
 					<div className="space-y-2">
 						<label htmlFor="group-members" className="text-sm font-medium">
-							Members
+							{t("pages.groups.members")}
 						</label>
 						<Input id="group-members" placeholder="user1, user2, user3" {...register("members")} />
 						<p className="text-xs text-[var(--color-text-tertiary)]">
-							Comma-separated list of user access keys.
+							{t("pages.groups.membersHint")}
 						</p>
 					</div>
 					<div className="flex justify-end gap-2">
 						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button type="submit" disabled={isSubmitting}>
 							{isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-							Create
+							{t("common.create")}
 						</Button>
 					</div>
 				</form>

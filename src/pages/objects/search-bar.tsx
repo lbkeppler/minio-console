@@ -1,5 +1,6 @@
 import { Search, X } from "lucide-react";
 import { type FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -9,6 +10,7 @@ interface SearchBarProps {
 
 export function SearchBar({ onSearch }: SearchBarProps) {
 	const [query, setQuery] = useState("");
+	const { t } = useTranslation();
 
 	function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -27,7 +29,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 				<Input
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					placeholder="Search by prefix..."
+					placeholder={t("pages.objects.searchByPrefix")}
 					className="pl-9 pr-8"
 				/>
 				{query && (
@@ -41,7 +43,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 				)}
 			</div>
 			<Button type="submit" size="sm" variant="outline">
-				<Search className="h-4 w-4" /> Search
+				<Search className="h-4 w-4" /> {t("common.search")}
 			</Button>
 		</form>
 	);

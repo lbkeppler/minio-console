@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 interface ObjectContent {
@@ -27,6 +28,7 @@ export function ObjectPreview({ bucket, objectKey, onClose }: ObjectPreviewProps
 	const [content, setContent] = useState<ObjectContent | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		setLoading(true);
@@ -82,7 +84,7 @@ export function ObjectPreview({ bucket, objectKey, onClose }: ObjectPreviewProps
 						<pre className="whitespace-pre-wrap break-words text-sm">{content.data}</pre>
 					) : (
 						<p className="text-sm text-[var(--color-text-secondary)]">
-							Binary file, download to view
+							{t("pages.objects.binaryFileHint")}
 						</p>
 					))}
 			</div>

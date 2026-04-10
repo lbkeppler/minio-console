@@ -1,25 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useBucketStore } from "@/stores/bucket-store";
 import { useToastStore } from "@/stores/toast-store";
-
-const bucketSchema = z.object({
-	name: z
-		.string()
-		.min(3, "Bucket name must be at least 3 characters")
-		.max(63, "Bucket name must be at most 63 characters")
-		.regex(
-			/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/,
-			"Bucket name must be lowercase, start/end with letter or number",
-		),
-});
-
-type BucketFormData = z.infer<typeof bucketSchema>;
 
 interface CreateBucketDialogProps {
 	open: boolean;
@@ -29,6 +17,20 @@ interface CreateBucketDialogProps {
 export function CreateBucketDialog({ open, onOpenChange }: CreateBucketDialogProps) {
 	const { createBucket } = useBucketStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
+
+	const bucketSchema = z.object({
+		name: z
+			.string()
+			.min(3, t("validation.bucketNameMin"))
+			.max(63, t("validation.bucketNameMax"))
+			.regex(
+				/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/,
+				t("validation.bucketNamePattern"),
+			),
+	});
+
+	type BucketFormData = z.infer<typeof bucketSchema>;
 
 	const {
 		register,
@@ -58,28 +60,28 @@ export function CreateBucketDialog({ open, onOpenChange }: CreateBucketDialogPro
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Create Bucket</DialogTitle>
+					<DialogTitle>{t("pages.buckets.createBucket")}</DialogTitle>
 				</DialogHeader>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 					<div className="space-y-2">
 						<label htmlFor="bucket-name" className="text-sm font-medium">
-							Bucket Name
+							{t("pages.buckets.bucketName")}
 						</label>
 						<Input id="bucket-name" placeholder="my-bucket" {...register("name")} />
 						{errors.name && (
 							<p className="text-xs text-[var(--color-danger)]">{errors.name.message}</p>
 						)}
 						<p className="text-xs text-[var(--color-text-tertiary)]">
-							Lowercase letters, numbers, hyphens, and periods. 3-63 characters.
+							{t("pages.buckets.bucketNameHint")}
 						</p>
 					</div>
 					<div className="flex justify-end gap-2">
 						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button type="submit" disabled={isSubmitting}>
 							{isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-							Create
+							{t("common.create")}
 						</Button>
 					</div>
 				</form>

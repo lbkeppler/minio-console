@@ -10,23 +10,25 @@ import {
 	Users,
 	UsersRound,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebar-store";
 
 const navItems = [
-	{ path: "/buckets", label: "Buckets", icon: Database },
-	{ path: "/objects", label: "Objects", icon: FolderOpen },
-	{ path: "/users", label: "Users", icon: Users },
-	{ path: "/groups", label: "Groups", icon: UsersRound },
-	{ path: "/policies", label: "Policies", icon: Shield },
-	{ path: "/monitoring", label: "Monitoring", icon: Activity },
-	{ path: "/terminal", label: "MC Terminal", icon: Terminal },
+	{ path: "/buckets", labelKey: "nav.buckets", icon: Database },
+	{ path: "/objects", labelKey: "nav.objects", icon: FolderOpen },
+	{ path: "/users", labelKey: "nav.users", icon: Users },
+	{ path: "/groups", labelKey: "nav.groups", icon: UsersRound },
+	{ path: "/policies", labelKey: "nav.policies", icon: Shield },
+	{ path: "/monitoring", labelKey: "nav.monitoring", icon: Activity },
+	{ path: "/terminal", labelKey: "nav.terminal", icon: Terminal },
 ];
 
 export function Sidebar() {
 	const { collapsed, toggle } = useSidebarStore();
 	const location = useLocation();
+	const { t } = useTranslation();
 
 	return (
 		<aside
@@ -51,6 +53,7 @@ export function Sidebar() {
 			<nav className="flex-1 space-y-1 px-2">
 				{navItems.map((item) => {
 					const isActive = location.pathname.startsWith(item.path);
+					const label = t(item.labelKey);
 					return (
 						<Link
 							key={item.path}
@@ -62,10 +65,10 @@ export function Sidebar() {
 									: "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text)]",
 								collapsed && "justify-center px-0",
 							)}
-							title={collapsed ? item.label : undefined}
+							title={collapsed ? label : undefined}
 						>
 							<item.icon className="h-4 w-4 shrink-0" />
-							{!collapsed && <span>{item.label}</span>}
+							{!collapsed && <span>{label}</span>}
 						</Link>
 					);
 				})}
@@ -80,7 +83,7 @@ export function Sidebar() {
 					)}
 				>
 					<Settings className="h-4 w-4 shrink-0" />
-					{!collapsed && <span>Settings</span>}
+					{!collapsed && <span>{t("nav.settings")}</span>}
 				</Link>
 			</div>
 		</aside>

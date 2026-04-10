@@ -2,21 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { type ServerProfile, useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
-
-const profileSchema = z.object({
-	alias: z.string().min(1, "Alias is required"),
-	endpoint: z.string().min(1, "Endpoint is required"),
-	accessKey: z.string().min(1, "Access key is required"),
-	secretKey: z.string().min(1, "Secret key is required"),
-	useSsl: z.boolean(),
-});
-
-type ProfileFormData = z.infer<typeof profileSchema>;
 
 interface ProfileFormProps {
 	profile?: ServerProfile;
@@ -26,11 +17,22 @@ interface ProfileFormProps {
 export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 	const { addProfile, updateProfile, testConnection } = useProfileStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [testing, setTesting] = useState(false);
 	const [testResult, setTestResult] = useState<{
 		success: boolean;
 		message: string;
 	} | null>(null);
+
+	const profileSchema = z.object({
+		alias: z.string().min(1, t("validation.aliasRequired")),
+		endpoint: z.string().min(1, t("validation.endpointRequired")),
+		accessKey: z.string().min(1, t("validation.accessKeyRequired")),
+		secretKey: z.string().min(1, t("validation.secretKeyRequired")),
+		useSsl: z.boolean(),
+	});
+
+	type ProfileFormData = z.infer<typeof profileSchema>;
 
 	const {
 		register,
@@ -100,7 +102,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<div className="space-y-2">
 				<label className="text-sm font-medium" htmlFor="alias">
-					Alias
+					{t("pages.settings.alias")}
 				</label>
 				<Input id="alias" placeholder="e.g., local, production" {...register("alias")} />
 				{errors.alias && (
@@ -110,7 +112,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 
 			<div className="space-y-2">
 				<label className="text-sm font-medium" htmlFor="endpoint">
-					Endpoint
+					{t("pages.settings.endpoint")}
 				</label>
 				<Input
 					id="endpoint"
@@ -124,7 +126,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 
 			<div className="space-y-2">
 				<label className="text-sm font-medium" htmlFor="accessKey">
-					Access Key
+					{t("pages.users.accessKey")}
 				</label>
 				<Input id="accessKey" placeholder="Access key" {...register("accessKey")} />
 				{errors.accessKey && (
@@ -134,7 +136,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 
 			<div className="space-y-2">
 				<label className="text-sm font-medium" htmlFor="secretKey">
-					Secret Key {profile && "(leave blank to keep current)"}
+					{profile ? t("pages.users.secretKeyKeep") : t("pages.users.secretKey")}
 				</label>
 				<Input id="secretKey" type="password" placeholder="Secret key" {...register("secretKey")} />
 				{errors.secretKey && (
@@ -145,7 +147,7 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 			<div className="flex items-center gap-2">
 				<input type="checkbox" id="useSsl" {...register("useSsl")} className="rounded" />
 				<label htmlFor="useSsl" className="text-sm">
-					Use SSL/TLS
+					{t("common.useSsl")}
 				</label>
 			</div>
 
@@ -169,15 +171,15 @@ export function ProfileForm({ profile, onClose }: ProfileFormProps) {
 			<div className="flex justify-between pt-2">
 				<Button type="button" variant="outline" onClick={handleTestConnection} disabled={testing}>
 					{testing && <Loader2 className="h-4 w-4 animate-spin" />}
-					Test Connection
+					{t("common.testConnection")}
 				</Button>
 				<div className="flex gap-2">
 					<Button type="button" variant="ghost" onClick={onClose}>
-						Cancel
+						{t("common.cancel")}
 					</Button>
 					<Button type="submit" disabled={isSubmitting}>
 						{isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-						{profile ? "Update" : "Create"}
+						{profile ? t("common.update") : t("common.create")}
 					</Button>
 				</div>
 			</div>

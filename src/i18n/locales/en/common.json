@@ -35,7 +35,22 @@
 		"next": "Next",
 		"refresh": "Refresh",
 		"download": "Download",
-		"upload": "Upload"
+		"upload": "Upload",
+		"continue": "Continue",
+		"add": "Add",
+		"remove": "Remove",
+		"update": "Update",
+		"suspend": "Suspend",
+		"enable": "Enable",
+		"running": "Running...",
+		"created": "Created",
+		"online": "online",
+		"offline": "offline",
+		"free": "free",
+		"prefix": "Prefix",
+		"expirationDays": "Expiration Days",
+		"testConnection": "Test Connection",
+		"useSsl": "Use SSL/TLS"
 	},
 	"header": {
 		"noServerSelected": "No server selected",
@@ -59,6 +74,7 @@
 	"pages": {
 		"dashboard": {
 			"title": "Dashboard",
+			"description": "Select a server profile to get started, or add one in Settings.",
 			"totalBuckets": "Total Buckets",
 			"totalObjects": "Total Objects",
 			"storageUsed": "Storage Used",
@@ -69,19 +85,34 @@
 			"createBucket": "Create Bucket",
 			"deleteBucket": "Delete Bucket",
 			"bucketName": "Bucket Name",
+			"bucketNameHint": "Lowercase letters, numbers, hyphens, and periods. 3-63 characters.",
+			"selectProfileFirst": "Select a server profile first to view buckets.",
 			"versioning": "Versioning",
 			"objectLocking": "Object Locking",
 			"quota": "Quota",
 			"replication": "Replication",
 			"lifecycle": "Lifecycle",
+			"lifecycleRules": "Lifecycle Rules",
+			"addRule": "Add Rule",
+			"ruleId": "Rule ID",
+			"noLifecycleRules": "No lifecycle rules configured.",
+			"prefixHint": "Optional. Filter objects by key prefix.",
 			"accessPolicy": "Access Policy",
+			"bucketPolicy": "Bucket Policy",
+			"savePolicy": "Save Policy",
+			"policyPlaceholder": "Paste JSON policy here, or leave empty and save to delete",
 			"encryption": "Encryption",
 			"tags": "Tags",
-			"events": "Events"
+			"events": "Events",
+			"settings": "Settings",
+			"noBucketSpecified": "No bucket specified."
 		},
 		"objects": {
 			"title": "Objects",
 			"uploadObject": "Upload Object",
+			"uploadFiles": "Upload Files",
+			"uploadTo": "Upload to:",
+			"selectFiles": "Select Files",
 			"deleteObject": "Delete Object",
 			"objectName": "Object Name",
 			"lastModified": "Last Modified",
@@ -90,7 +121,11 @@
 			"preview": "Preview",
 			"metadata": "Metadata",
 			"share": "Share",
-			"shareLink": "Share Link"
+			"shareLink": "Share Link",
+			"copyPresignedUrl": "Copy Presigned URL",
+			"selectBucketFirst": "Select a bucket from the Buckets page to browse objects.",
+			"binaryFileHint": "Binary file, download to view",
+			"searchByPrefix": "Search by prefix..."
 		},
 		"users": {
 			"title": "Users",
@@ -98,9 +133,14 @@
 			"deleteUser": "Delete User",
 			"accessKey": "Access Key",
 			"secretKey": "Secret Key",
+			"secretKeyHint": "Minimum 8 characters.",
+			"secretKeyKeep": "Secret Key (leave blank to keep current)",
 			"userStatus": "User Status",
 			"assignedPolicies": "Assigned Policies",
-			"memberOfGroups": "Member of Groups"
+			"memberOfGroups": "Member of Groups",
+			"selectProfileFirst": "Select a server profile first to view users.",
+			"selectPolicy": "Select a policy...",
+			"noPoliciesAttached": "No policies attached."
 		},
 		"groups": {
 			"title": "Groups",
@@ -108,7 +148,12 @@
 			"deleteGroup": "Delete Group",
 			"groupName": "Group Name",
 			"members": "Members",
-			"groupPolicies": "Group Policies"
+			"membersOf": "Members of \"{{name}}\"",
+			"addMember": "Add member...",
+			"noMembers": "No members yet.",
+			"membersHint": "Comma-separated list of user access keys.",
+			"groupPolicies": "Group Policies",
+			"selectProfileFirst": "Select a server profile first to view groups."
 		},
 		"policies": {
 			"title": "Policies",
@@ -117,7 +162,9 @@
 			"policyName": "Policy Name",
 			"policyDocument": "Policy Document",
 			"builtIn": "Built-in",
-			"custom": "Custom"
+			"custom": "Custom",
+			"editPolicy": "Edit Policy",
+			"selectProfileFirst": "Select a server profile first to view policies."
 		},
 		"monitoring": {
 			"title": "Monitoring",
@@ -126,13 +173,21 @@
 			"audit": "Audit Log",
 			"healthCheck": "Health Check",
 			"drives": "Drives",
-			"network": "Network"
+			"network": "Network",
+			"version": "Version",
+			"uptime": "Uptime",
+			"diskUsage": "Disk Usage",
+			"loadingDiskUsage": "Loading disk usage...",
+			"noDiskInfo": "No disk information available.",
+			"selectProfileFirst": "Select a server profile first to view monitoring data."
 		},
 		"terminal": {
 			"title": "MC Terminal",
-			"placeholder": "Type a command...",
+			"placeholder": "Enter command... (Tab to autocomplete)",
+			"helpText": "Type an mc command below and press Enter. Commands are executed against the active server profile.\n\nExamples: ls, admin info, admin user list\nUse Tab to autocomplete commands.",
 			"clear": "Clear",
-			"history": "History"
+			"history": "History",
+			"selectProfileFirst": "Select a server profile first to use the terminal."
 		},
 		"settings": {
 			"title": "Settings",
@@ -140,12 +195,31 @@
 			"addProfile": "Add Profile",
 			"editProfile": "Edit Profile",
 			"deleteProfile": "Delete Profile",
+			"newProfile": "New Profile",
+			"addFirstProfile": "Add your first profile",
+			"noProfiles": "No server profiles configured yet.",
 			"alias": "Alias",
 			"endpoint": "Endpoint",
 			"appearance": "Appearance",
 			"general": "General",
 			"about": "About"
 		}
+	},
+	"validation": {
+		"bucketNameMin": "Bucket name must be at least 3 characters",
+		"bucketNameMax": "Bucket name must be at most 63 characters",
+		"bucketNamePattern": "Bucket name must be lowercase, start/end with letter or number",
+		"ruleIdRequired": "Rule ID is required",
+		"minOneDay": "Must be at least 1 day",
+		"accessKeyMin": "Access key must be at least 3 characters",
+		"secretKeyMin": "Secret key must be at least 8 characters",
+		"groupNameRequired": "Group name is required",
+		"aliasRequired": "Alias is required",
+		"endpointRequired": "Endpoint is required",
+		"accessKeyRequired": "Access key is required",
+		"secretKeyRequired": "Secret key is required",
+		"invalidJson": "Invalid JSON",
+		"fixJsonSyntax": "Please fix the JSON syntax before saving."
 	},
 	"errors": {
 		"generic": "An error occurred. Please try again.",

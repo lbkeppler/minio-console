@@ -1,5 +1,6 @@
 import { save } from "@tauri-apps/plugin-dialog";
 import { Download, Link, MoreHorizontal, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -18,6 +19,7 @@ interface ObjectActionsProps {
 export function ObjectActions({ object }: ObjectActionsProps) {
 	const { deleteObject, getPresignedUrl, downloadObject } = useObjectStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 
 	async function handleDelete() {
 		try {
@@ -76,14 +78,14 @@ export function ObjectActions({ object }: ObjectActionsProps) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
 				<DropdownMenuItem onClick={handleDownload}>
-					<Download className="mr-2 h-4 w-4" /> Download
+					<Download className="mr-2 h-4 w-4" /> {t("common.download")}
 				</DropdownMenuItem>
 				<DropdownMenuItem onClick={handlePresignedUrl}>
-					<Link className="mr-2 h-4 w-4" /> Copy Presigned URL
+					<Link className="mr-2 h-4 w-4" /> {t("pages.objects.copyPresignedUrl")}
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={handleDelete} className="text-[var(--color-danger)]">
-					<Trash2 className="mr-2 h-4 w-4" /> Delete
+					<Trash2 className="mr-2 h-4 w-4" /> {t("common.delete")}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

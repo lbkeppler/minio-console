@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, File, FolderOpen, Loader2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -25,6 +26,7 @@ export function ObjectsPage() {
 
 	const { objects, loading, currentBucket, setBucket, setPrefix, loadObjects } = useObjectStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [uploadOpen, setUploadOpen] = useState(false);
 	const [previewKey, setPreviewKey] = useState<string | null>(null);
 
@@ -54,9 +56,9 @@ export function ObjectsPage() {
 	if (!bucket) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">Objects</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.objects.title")}</h1>
 				<p className="text-[var(--color-text-secondary)]">
-					Select a bucket from the Buckets page to browse objects.
+					{t("pages.objects.selectBucketFirst")}
 				</p>
 			</div>
 		);
@@ -71,7 +73,7 @@ export function ObjectsPage() {
 	const columns: ColumnDef<ObjectInfo, string>[] = [
 		{
 			accessorKey: "key",
-			header: "Name",
+			header: t("common.name"),
 			cell: ({ row }) => {
 				const obj = row.original;
 				const displayName = obj.is_prefix
@@ -91,12 +93,12 @@ export function ObjectsPage() {
 		},
 		{
 			accessorKey: "size",
-			header: "Size",
+			header: t("common.size"),
 			cell: ({ row }) => formatSize(row.original.size),
 		},
 		{
 			accessorKey: "last_modified",
-			header: "Last Modified",
+			header: t("pages.objects.lastModified"),
 			cell: ({ row }) =>
 				row.original.last_modified
 					? new Date(row.original.last_modified).toLocaleString()
@@ -118,7 +120,7 @@ export function ObjectsPage() {
 						<Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />
 					)}
 					<Button onClick={() => setUploadOpen(true)} size="sm">
-						<Upload className="h-4 w-4" /> Upload
+						<Upload className="h-4 w-4" /> {t("common.upload")}
 					</Button>
 				</div>
 			</div>

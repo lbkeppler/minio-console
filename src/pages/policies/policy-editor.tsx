@@ -1,5 +1,6 @@
 import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAdminStore } from "@/stores/admin-store";
@@ -27,6 +28,7 @@ export function PolicyEditorPage() {
 
 	const { getPolicy, createPolicy } = useAdminStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 
 	const [text, setText] = useState("");
 	const [loading, setLoading] = useState(!isNew);
@@ -63,8 +65,8 @@ export function PolicyEditorPage() {
 			JSON.parse(text);
 		} catch {
 			addToast({
-				title: "Invalid JSON",
-				description: "Please fix the JSON syntax before saving.",
+				title: t("validation.invalidJson"),
+				description: t("validation.fixJsonSyntax"),
 				variant: "error",
 			});
 			return;
@@ -95,12 +97,12 @@ export function PolicyEditorPage() {
 						</Button>
 					</Link>
 					<h1 className="text-2xl font-semibold">
-						{isNew ? "Create" : "Edit"} Policy: {name}
+						{isNew ? t("pages.policies.createPolicy") : t("pages.policies.editPolicy")}: {name}
 					</h1>
 				</div>
 				<Button onClick={handleSave} disabled={saving || loading} size="sm">
 					{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-					Save
+					{t("common.save")}
 				</Button>
 			</div>
 

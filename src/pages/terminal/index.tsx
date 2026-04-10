@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { Loader2, Send, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useProfileStore } from "@/stores/profile-store";
 
@@ -68,6 +69,7 @@ const MC_COMMANDS = [
 
 export function TerminalPage() {
 	const { config } = useProfileStore();
+	const { t } = useTranslation();
 	const hasActiveProfile = !!config?.active_profile_id;
 
 	const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -203,9 +205,9 @@ export function TerminalPage() {
 	if (!hasActiveProfile) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">MC Terminal</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.terminal.title")}</h1>
 				<p className="text-[var(--color-text-secondary)]">
-					Select a server profile first to use the terminal.
+					{t("pages.terminal.selectProfileFirst")}
 				</p>
 			</div>
 		);
@@ -214,10 +216,10 @@ export function TerminalPage() {
 	return (
 		<div className="flex h-full flex-col gap-4">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">MC Terminal</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.terminal.title")}</h1>
 				<Button variant="outline" size="sm" onClick={handleClear}>
 					<Trash2 className="mr-2 h-4 w-4" />
-					Clear
+					{t("pages.terminal.clear")}
 				</Button>
 			</div>
 
@@ -226,11 +228,8 @@ export function TerminalPage() {
 				className="flex-1 overflow-y-auto rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4 font-mono text-sm"
 			>
 				{history.length === 0 ? (
-					<p className="text-[var(--color-text-tertiary)]">
-						Type an mc command below and press Enter. Commands are executed against the active
-						server profile.
-						{"\n\n"}Examples: ls, admin info, admin user list
-						{"\n"}Use Tab to autocomplete commands.
+					<p className="text-[var(--color-text-tertiary)] whitespace-pre-wrap">
+						{t("pages.terminal.helpText")}
 					</p>
 				) : (
 					history.map((entry, i) => (
@@ -250,7 +249,7 @@ export function TerminalPage() {
 				{running && (
 					<div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
 						<Loader2 className="h-4 w-4 animate-spin" />
-						Running...
+						{t("common.running")}
 					</div>
 				)}
 			</div>
@@ -290,7 +289,7 @@ export function TerminalPage() {
 						onKeyDown={handleKeyDown}
 						onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
 						onFocus={() => updateSuggestions(command)}
-						placeholder="Enter command... (Tab to autocomplete)"
+						placeholder={t("pages.terminal.placeholder")}
 						disabled={running}
 						className="flex h-9 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-1 font-mono text-sm transition-colors placeholder:text-[var(--color-text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50"
 					/>

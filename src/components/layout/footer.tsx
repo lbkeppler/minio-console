@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useProfileStore } from "@/stores/profile-store";
 
 export function Footer() {
 	const { config } = useProfileStore();
+	const { t } = useTranslation();
 	const activeProfile = config?.profiles.find((p) => p.id === config.active_profile_id);
 
 	return (
@@ -15,7 +17,7 @@ export function Footer() {
 				) : (
 					<>
 						<span className="inline-block h-2 w-2 rounded-full bg-[var(--color-text-tertiary)]" />
-						<span>Not connected</span>
+						<span>{t("footer.notConnected")}</span>
 					</>
 				)}
 			</div>

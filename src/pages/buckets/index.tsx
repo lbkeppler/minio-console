@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Database, Loader2, Plus, Settings, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -9,33 +10,34 @@ import { useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
 import { CreateBucketDialog } from "./create-bucket-dialog";
 
-const columns: ColumnDef<BucketInfo, string>[] = [
-	{
-		accessorKey: "name",
-		header: "Name",
-		cell: ({ row }) => (
-			<div className="flex items-center gap-2">
-				<Database className="h-4 w-4 text-[var(--color-accent)]" />
-				<span className="font-medium">{row.original.name}</span>
-			</div>
-		),
-	},
-	{
-		accessorKey: "creation_date",
-		header: "Created",
-		cell: ({ row }) =>
-			row.original.creation_date ? new Date(row.original.creation_date).toLocaleDateString() : "—",
-	},
-];
-
 export function BucketsPage() {
 	const { buckets, loading, loadBuckets, deleteBucket } = useBucketStore();
 	const { config } = useProfileStore();
 	const { addToast } = useToastStore();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const [createOpen, setCreateOpen] = useState(false);
 
 	const hasActiveProfile = !!config?.active_profile_id;
+
+	const columns: ColumnDef<BucketInfo, string>[] = [
+		{
+			accessorKey: "name",
+			header: t("common.name"),
+			cell: ({ row }) => (
+				<div className="flex items-center gap-2">
+					<Database className="h-4 w-4 text-[var(--color-accent)]" />
+					<span className="font-medium">{row.original.name}</span>
+				</div>
+			),
+		},
+		{
+			accessorKey: "creation_date",
+			header: t("common.created"),
+			cell: ({ row }) =>
+				row.original.creation_date ? new Date(row.original.creation_date).toLocaleDateString() : "—",
+		},
+	];
 
 	useEffect(() => {
 		if (hasActiveProfile) {
@@ -52,9 +54,9 @@ export function BucketsPage() {
 	if (!hasActiveProfile) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">Buckets</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.buckets.title")}</h1>
 				<p className="text-[var(--color-text-secondary)]">
-					Select a server profile first to view buckets.
+					{t("pages.buckets.selectProfileFirst")}
 				</p>
 			</div>
 		);
@@ -108,13 +110,13 @@ export function BucketsPage() {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-semibold">Buckets</h1>
+				<h1 className="text-2xl font-semibold">{t("pages.buckets.title")}</h1>
 				<div className="flex items-center gap-2">
 					{loading && (
 						<Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />
 					)}
 					<Button onClick={() => setCreateOpen(true)} size="sm">
-						<Plus className="h-4 w-4" /> Create Bucket
+						<Plus className="h-4 w-4" /> {t("pages.buckets.createBucket")}
 					</Button>
 				</div>
 			</div>

@@ -1,5 +1,6 @@
 import { Loader2, Plus, Shield, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type UserInfo, useAdminStore } from "@/stores/admin-store";
@@ -14,6 +15,7 @@ interface UserPoliciesDialogProps {
 export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDialogProps) {
 	const { policies, loadPolicies, attachPolicy, detachPolicy, loadUsers } = useAdminStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [selectedPolicy, setSelectedPolicy] = useState("");
 	const [attaching, setAttaching] = useState(false);
 
@@ -68,7 +70,7 @@ export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDia
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Policies — {user.access_key}</DialogTitle>
+					<DialogTitle>{t("pages.policies.title")} — {user.access_key}</DialogTitle>
 				</DialogHeader>
 				<div className="mt-4 space-y-4">
 					{/* Attach new policy */}
@@ -78,7 +80,7 @@ export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDia
 							onChange={(e) => setSelectedPolicy(e.target.value)}
 							className="flex-1 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] text-[var(--color-text)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] [&>option]:bg-[var(--color-bg-secondary)] [&>option]:text-[var(--color-text)]"
 						>
-							<option value="">Select a policy...</option>
+							<option value="">{t("pages.users.selectPolicy")}</option>
 							{availablePolicies.map((p) => (
 								<option key={p.name} value={p.name}>
 									{p.name}
@@ -97,7 +99,7 @@ export function UserPoliciesDialog({ user, open, onOpenChange }: UserPoliciesDia
 					{/* Current policies */}
 					<div className="space-y-1">
 						{user.policies.length === 0 ? (
-							<p className="text-sm text-[var(--color-text-tertiary)]">No policies attached.</p>
+							<p className="text-sm text-[var(--color-text-tertiary)]">{t("pages.users.noPoliciesAttached")}</p>
 						) : (
 							user.policies.map((p) => (
 								<div

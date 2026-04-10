@@ -1,5 +1,6 @@
 import { Loader2, Plus, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ interface GroupMembersDialogProps {
 export function GroupMembersDialog({ group, open, onOpenChange }: GroupMembersDialogProps) {
 	const { addGroupMembers, removeGroupMembers } = useAdminStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [newMember, setNewMember] = useState("");
 	const [loading, setLoading] = useState(false);
 
@@ -57,12 +59,12 @@ export function GroupMembersDialog({ group, open, onOpenChange }: GroupMembersDi
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Members of "{group.name}"</DialogTitle>
+					<DialogTitle>{t("pages.groups.membersOf", { name: group.name })}</DialogTitle>
 				</DialogHeader>
 				<div className="space-y-4">
 					<div className="flex gap-2">
 						<Input
-							placeholder="Add member..."
+							placeholder={t("pages.groups.addMember")}
 							value={newMember}
 							onChange={(e) => setNewMember(e.target.value)}
 							onKeyDown={(e) => {
@@ -82,7 +84,7 @@ export function GroupMembersDialog({ group, open, onOpenChange }: GroupMembersDi
 					</div>
 					<div className="max-h-64 space-y-1 overflow-y-auto">
 						{group.members.length === 0 && (
-							<p className="text-sm text-[var(--color-text-secondary)]">No members yet.</p>
+							<p className="text-sm text-[var(--color-text-secondary)]">{t("pages.groups.noMembers")}</p>
 						)}
 						{group.members.map((member) => (
 							<div

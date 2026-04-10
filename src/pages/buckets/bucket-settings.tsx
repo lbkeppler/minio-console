@@ -1,5 +1,6 @@
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useBucketConfigStore } from "@/stores/bucket-config-store";
@@ -12,6 +13,7 @@ export function BucketSettingsPage() {
 	const { config, loading, loadConfig, setVersioning, setPolicy, deletePolicy } =
 		useBucketConfigStore();
 	const { addToast } = useToastStore();
+	const { t } = useTranslation();
 	const [policyText, setPolicyText] = useState("");
 	const [saving, setSaving] = useState(false);
 
@@ -72,8 +74,8 @@ export function BucketSettingsPage() {
 	if (!bucket) {
 		return (
 			<div className="space-y-4">
-				<h1 className="text-2xl font-semibold">Bucket Settings</h1>
-				<p className="text-[var(--color-text-secondary)]">No bucket specified.</p>
+				<h1 className="text-2xl font-semibold">{t("pages.buckets.settings")}</h1>
+				<p className="text-[var(--color-text-secondary)]">{t("pages.buckets.noBucketSpecified")}</p>
 			</div>
 		);
 	}
@@ -86,39 +88,39 @@ export function BucketSettingsPage() {
 						<ArrowLeft className="h-4 w-4" />
 					</Button>
 				</Link>
-				<h1 className="text-2xl font-semibold">{bucket} — Settings</h1>
+				<h1 className="text-2xl font-semibold">{bucket} — {t("pages.buckets.settings")}</h1>
 				{loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />}
 			</div>
 
 			{/* Versioning */}
 			<section className="space-y-3 rounded-md border border-[var(--color-border)] p-4">
-				<h2 className="text-lg font-medium">Versioning</h2>
+				<h2 className="text-lg font-medium">{t("pages.buckets.versioning")}</h2>
 				<div className="flex items-center gap-4">
 					<span className="text-sm">
-						Status:{" "}
+						{t("common.status")}:{" "}
 						<span className="font-medium">
-							{config?.versioning === "Enabled" ? "Enabled" : "Disabled"}
+							{config?.versioning === "Enabled" ? t("common.enabled") : t("common.disabled")}
 						</span>
 					</span>
 					<Button size="sm" variant="outline" onClick={handleToggleVersioning}>
-						{config?.versioning === "Enabled" ? "Suspend" : "Enable"}
+						{config?.versioning === "Enabled" ? t("common.suspend") : t("common.enable")}
 					</Button>
 				</div>
 			</section>
 
 			{/* Policy */}
 			<section className="space-y-3 rounded-md border border-[var(--color-border)] p-4">
-				<h2 className="text-lg font-medium">Bucket Policy</h2>
+				<h2 className="text-lg font-medium">{t("pages.buckets.bucketPolicy")}</h2>
 				<textarea
 					className="min-h-[160px] w-full rounded-md border border-[var(--color-border)] bg-transparent p-3 font-mono text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-					placeholder="Paste JSON policy here, or leave empty and save to delete"
+					placeholder={t("pages.buckets.policyPlaceholder")}
 					value={policyText}
 					onChange={(e) => setPolicyText(e.target.value)}
 				/>
 				<div className="flex justify-end">
 					<Button size="sm" onClick={handleSavePolicy} disabled={saving}>
 						{saving && <Loader2 className="h-4 w-4 animate-spin" />}
-						Save Policy
+						{t("pages.buckets.savePolicy")}
 					</Button>
 				</div>
 			</section>
