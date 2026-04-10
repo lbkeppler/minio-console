@@ -292,11 +292,7 @@ export function TerminalPage() {
 						autoFocus
 					/>
 					<Button type="submit" size="sm" disabled={running || !command.trim()}>
-						{running ? (
-							<Loader2 className="h-4 w-4 animate-spin" />
-						) : (
-							<Send className="h-4 w-4" />
-						)}
+						{running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
 					</Button>
 				</form>
 			</div>
