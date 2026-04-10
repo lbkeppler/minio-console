@@ -2,7 +2,6 @@ import { invoke } from "@tauri-apps/api/core";
 import { Loader2, Send, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useProfileStore } from "@/stores/profile-store";
 
 interface McCommandResult {
@@ -16,6 +15,57 @@ interface HistoryEntry {
 	exit_code: number;
 }
 
+const MC_COMMANDS = [
+	"ls",
+	"mb",
+	"rb",
+	"cp",
+	"mv",
+	"rm",
+	"cat",
+	"head",
+	"stat",
+	"du",
+	"find",
+	"diff",
+	"mirror",
+	"version",
+	"admin info",
+	"admin user list",
+	"admin user add",
+	"admin user remove",
+	"admin user enable",
+	"admin user disable",
+	"admin group list",
+	"admin group add",
+	"admin group remove",
+	"admin group info",
+	"admin policy list",
+	"admin policy info",
+	"admin policy create",
+	"admin policy remove",
+	"admin policy attach",
+	"admin policy detach",
+	"admin policy entities",
+	"admin config get",
+	"admin config set",
+	"admin config reset",
+	"admin heal",
+	"admin trace",
+	"admin console",
+	"admin prometheus metrics",
+	"admin service restart",
+	"admin service stop",
+	"admin update",
+	"admin bucket remote add",
+	"admin bucket remote ls",
+	"admin bucket remote rm",
+	"admin replicate add",
+	"admin replicate info",
+	"admin replicate rm",
+	"admin replicate status",
+];
+
 export function TerminalPage() {
 	const { config } = useProfileStore();
 	const hasActiveProfile = !!config?.active_profile_id;
@@ -25,6 +75,9 @@ export function TerminalPage() {
 	const [running, setRunning] = useState(false);
 	const [historyIndex, setHistoryIndex] = useState(-1);
 	const [commandHistory, setCommandHistory] = useState<string[]>([]);
+	const [suggestions, setSuggestions] = useState<string[]>([]);
+	const [selectedSuggestion, setSelectedSuggestion] = useState(0);
+	const [showSuggestions, setShowSuggestions] = useState(false);
 
 	const outputRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -40,6 +93,30 @@ export function TerminalPage() {
 		scrollToBottom();
 	}, [history, scrollToBottom]);
 
+	function updateSuggestions(value: string) {
+		if (!value.trim()) {
+			setSuggestions([]);
+			setShowSuggestions(false);
+			return;
+		}
+		const lower = value.toLowerCase();
+		const matches = MC_COMMANDS.filter((cmd) => cmd.startsWith(lower) && cmd !== lower);
+		setSuggestions(matches.slice(0, 8));
+		setSelectedSuggestion(0);
+		setShowSuggestions(matches.length > 0);
+	}
+
+	function handleInputChange(value: string) {
+		setCommand(value);
+		updateSuggestions(value);
+	}
+
+	function applySuggestion(suggestion: string) {
+		setCommand(suggestion);
+		setShowSuggestions(false);
+		inputRef.current?.focus();
+	}
+
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent) => {
 			e.preventDefault();
@@ -48,6 +125,7 @@ export function TerminalPage() {
 
 			setRunning(true);
 			setCommand("");
+			setShowSuggestions(false);
 			setHistoryIndex(-1);
 			setCommandHistory((prev) => [trimmed, ...prev]);
 
@@ -69,14 +147,36 @@ export function TerminalPage() {
 		[command, running],
 	);
 
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent) => {
+	function handleKeyDown(e: React.KeyboardEvent) {
+		if (showSuggestions && suggestions.length > 0) {
+			if (e.key === "Tab" || (e.key === "ArrowRight" && suggestions.length > 0)) {
+				e.preventDefault();
+				applySuggestion(suggestions[selectedSuggestion] ?? suggestions[0] ?? "");
+				return;
+			}
+			if (e.key === "ArrowDown") {
+				e.preventDefault();
+				setSelectedSuggestion((prev) => Math.min(prev + 1, suggestions.length - 1));
+				return;
+			}
+			if (e.key === "ArrowUp") {
+				e.preventDefault();
+				setSelectedSuggestion((prev) => Math.max(prev - 1, 0));
+				return;
+			}
+			if (e.key === "Escape") {
+				setShowSuggestions(false);
+				return;
+			}
+		} else {
 			if (e.key === "ArrowUp") {
 				e.preventDefault();
 				if (commandHistory.length === 0) return;
 				const next = Math.min(historyIndex + 1, commandHistory.length - 1);
 				setHistoryIndex(next);
-				setCommand(commandHistory[next] ?? "");
+				const cmd = commandHistory[next] ?? "";
+				setCommand(cmd);
+				setShowSuggestions(false);
 			} else if (e.key === "ArrowDown") {
 				e.preventDefault();
 				if (historyIndex <= 0) {
@@ -87,10 +187,10 @@ export function TerminalPage() {
 					setHistoryIndex(next);
 					setCommand(commandHistory[next] ?? "");
 				}
+				setShowSuggestions(false);
 			}
-		},
-		[commandHistory, historyIndex],
-	);
+		}
+	}
 
 	const handleClear = useCallback(() => {
 		setHistory([]);
@@ -125,7 +225,8 @@ export function TerminalPage() {
 					<p className="text-[var(--color-text-tertiary)]">
 						Type an mc command below and press Enter. Commands are executed against the active
 						server profile.
-						{"\n\n"}Examples: ls, admin info, version
+						{"\n\n"}Examples: ls, admin info, admin user list
+						{"\n"}Use Tab to autocomplete commands.
 					</p>
 				) : (
 					history.map((entry, i) => (
@@ -150,22 +251,55 @@ export function TerminalPage() {
 				)}
 			</div>
 
-			<form onSubmit={handleSubmit} className="flex items-center gap-2">
-				<span className="shrink-0 font-mono text-sm text-[var(--color-text-secondary)]">mc $</span>
-				<Input
-					ref={inputRef}
-					value={command}
-					onChange={(e) => setCommand(e.target.value)}
-					onKeyDown={handleKeyDown}
-					placeholder="Enter command..."
-					disabled={running}
-					className="font-mono"
-					autoFocus
-				/>
-				<Button type="submit" size="sm" disabled={running || !command.trim()}>
-					{running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-				</Button>
-			</form>
+			{/* Command input with autocomplete */}
+			<div className="relative">
+				{showSuggestions && suggestions.length > 0 && (
+					<div className="absolute bottom-full left-0 mb-1 w-full rounded-md border border-[var(--color-border)] bg-[var(--color-bg)] shadow-lg">
+						{suggestions.map((s, i) => (
+							<button
+								key={s}
+								type="button"
+								onClick={() => applySuggestion(s)}
+								className={`flex w-full items-center px-3 py-1.5 text-left font-mono text-sm ${
+									i === selectedSuggestion
+										? "bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
+										: "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]"
+								}`}
+							>
+								<span className="text-[var(--color-text-tertiary)]">mc </span>
+								<span className="ml-1">{s}</span>
+								{i === selectedSuggestion && (
+									<span className="ml-auto text-xs text-[var(--color-text-tertiary)]">Tab</span>
+								)}
+							</button>
+						))}
+					</div>
+				)}
+				<form onSubmit={handleSubmit} className="flex items-center gap-2">
+					<span className="shrink-0 font-mono text-sm text-[var(--color-text-secondary)]">
+						mc $
+					</span>
+					<input
+						ref={inputRef}
+						value={command}
+						onChange={(e) => handleInputChange(e.target.value)}
+						onKeyDown={handleKeyDown}
+						onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+						onFocus={() => updateSuggestions(command)}
+						placeholder="Enter command... (Tab to autocomplete)"
+						disabled={running}
+						className="flex h-9 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-1 font-mono text-sm transition-colors placeholder:text-[var(--color-text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+						autoFocus
+					/>
+					<Button type="submit" size="sm" disabled={running || !command.trim()}>
+						{running ? (
+							<Loader2 className="h-4 w-4 animate-spin" />
+						) : (
+							<Send className="h-4 w-4" />
+						)}
+					</Button>
+				</form>
+			</div>
 		</div>
 	);
 }
