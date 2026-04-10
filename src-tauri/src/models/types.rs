@@ -29,6 +29,26 @@ impl Default for AppConfig {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BucketInfo {
+    pub name: String,
+    pub creation_date: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ObjectInfo {
+    pub key: String,
+    pub size: i64,
+    pub last_modified: Option<String>,
+    pub is_prefix: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PresignedUrlResult {
+    pub url: String,
+    pub expires_in_secs: u64,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -73,5 +93,30 @@ mod tests {
         let toml_str = toml::to_string(&config).unwrap();
         let deserialized: AppConfig = toml::from_str(&toml_str).unwrap();
         assert_eq!(config, deserialized);
+    }
+
+    #[test]
+    fn test_bucket_info_serialization() {
+        let bucket = BucketInfo {
+            name: "my-bucket".to_string(),
+            creation_date: Some("2024-01-01T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&bucket).unwrap();
+        let deserialized: BucketInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.name, "my-bucket");
+    }
+
+    #[test]
+    fn test_object_info_serialization() {
+        let obj = ObjectInfo {
+            key: "photos/cat.jpg".to_string(),
+            size: 1024,
+            last_modified: Some("2024-06-15T12:00:00Z".to_string()),
+            is_prefix: false,
+        };
+        let json = serde_json::to_string(&obj).unwrap();
+        let deserialized: ObjectInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.key, "photos/cat.jpg");
+        assert!(!deserialized.is_prefix);
     }
 }
