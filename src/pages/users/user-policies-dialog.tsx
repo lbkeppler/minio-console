@@ -82,7 +82,7 @@ export function UserPoliciesDialog({
 				<DialogHeader>
 					<DialogTitle>Policies — {user.access_key}</DialogTitle>
 				</DialogHeader>
-				<div className="space-y-4">
+				<div className="mt-4 space-y-4">
 					{/* Attach new policy */}
 					<div className="flex gap-2">
 						<select
