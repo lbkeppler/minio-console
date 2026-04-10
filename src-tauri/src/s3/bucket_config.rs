@@ -1,5 +1,5 @@
-use aws_sdk_s3::Client;
 use crate::models::{BucketConfig, LifecycleRule};
+use aws_sdk_s3::Client;
 
 pub async fn get_bucket_config(client: &Client, bucket: &str) -> Result<BucketConfig, String> {
     let versioning = client
@@ -68,7 +68,10 @@ pub async fn delete_bucket_policy(client: &Client, bucket: &str) -> Result<(), S
     Ok(())
 }
 
-pub async fn get_lifecycle_rules(client: &Client, bucket: &str) -> Result<Vec<LifecycleRule>, String> {
+pub async fn get_lifecycle_rules(
+    client: &Client,
+    bucket: &str,
+) -> Result<Vec<LifecycleRule>, String> {
     let output = match client
         .get_bucket_lifecycle_configuration()
         .bucket(bucket)
@@ -101,8 +104,8 @@ pub async fn put_lifecycle_rule(
     rule: &LifecycleRule,
 ) -> Result<(), String> {
     use aws_sdk_s3::types::{
-        ExpirationStatus, LifecycleExpiration, LifecycleRule as S3Rule,
-        LifecycleRuleFilter, BucketLifecycleConfiguration,
+        BucketLifecycleConfiguration, ExpirationStatus, LifecycleExpiration,
+        LifecycleRule as S3Rule, LifecycleRuleFilter,
     };
 
     let mut rules = Vec::new();
@@ -121,7 +124,11 @@ pub async fn put_lifecycle_rule(
 
     let mut builder = S3Rule::builder()
         .id(&rule.id)
-        .filter(LifecycleRuleFilter::builder().prefix(rule.prefix.clone()).build())
+        .filter(
+            LifecycleRuleFilter::builder()
+                .prefix(rule.prefix.clone())
+                .build(),
+        )
         .status(if rule.status == "Enabled" {
             ExpirationStatus::Enabled
         } else {
@@ -129,12 +136,14 @@ pub async fn put_lifecycle_rule(
         });
 
     if let Some(days) = rule.expiration_days {
-        builder = builder.expiration(
-            LifecycleExpiration::builder().days(days).build(),
-        );
+        builder = builder.expiration(LifecycleExpiration::builder().days(days).build());
     }
 
-    rules.push(builder.build().map_err(|e| format!("Failed to build rule: {}", e))?);
+    rules.push(
+        builder
+            .build()
+            .map_err(|e| format!("Failed to build rule: {}", e))?,
+    );
 
     let config = BucketLifecycleConfiguration::builder()
         .set_rules(Some(rules))

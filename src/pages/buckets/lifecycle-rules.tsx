@@ -102,8 +102,8 @@ export function LifecycleRules({ bucket }: LifecycleRulesProps) {
 								<p className="text-sm font-medium">{rule.id}</p>
 								<p className="text-xs text-[var(--color-text-secondary)]">
 									Prefix: {rule.prefix || "(none)"} · Expiration:{" "}
-									{rule.expiration_days != null ? `${rule.expiration_days} days` : "—"} ·
-									Status: {rule.status}
+									{rule.expiration_days != null ? `${rule.expiration_days} days` : "—"} · Status:{" "}
+									{rule.status}
 								</p>
 							</div>
 							<Button variant="ghost" size="icon" onClick={() => handleDelete(rule.id)}>
@@ -142,12 +142,7 @@ export function LifecycleRules({ bucket }: LifecycleRulesProps) {
 							<label htmlFor="rule-expiration" className="text-sm font-medium">
 								Expiration Days
 							</label>
-							<Input
-								id="rule-expiration"
-								type="number"
-								min={1}
-								{...register("expirationDays")}
-							/>
+							<Input id="rule-expiration" type="number" min={1} {...register("expirationDays")} />
 							{errors.expirationDays && (
 								<p className="text-xs text-[var(--color-danger)]">
 									{errors.expirationDays.message}
