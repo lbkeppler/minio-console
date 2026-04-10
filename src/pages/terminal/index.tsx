@@ -82,6 +82,10 @@ export function TerminalPage() {
 	const outputRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	useEffect(() => {
+		inputRef.current?.focus();
+	}, []);
+
 	const scrollToBottom = useCallback(() => {
 		if (outputRef.current) {
 			outputRef.current.scrollTop = outputRef.current.scrollHeight;
@@ -289,7 +293,6 @@ export function TerminalPage() {
 						placeholder="Enter command... (Tab to autocomplete)"
 						disabled={running}
 						className="flex h-9 w-full rounded-md border border-[var(--color-border)] bg-transparent px-3 py-1 font-mono text-sm transition-colors placeholder:text-[var(--color-text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50"
-						autoFocus
 					/>
 					<Button type="submit" size="sm" disabled={running || !command.trim()}>
 						{running ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}

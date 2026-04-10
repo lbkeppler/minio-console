@@ -64,6 +64,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 		);
 	}, [query]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset selection when query changes
 	useEffect(() => {
 		setSelectedIndex(0);
 	}, [query]);
@@ -106,14 +107,14 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 	if (!open) return null;
 
 	return (
-		<div
-			className="fixed inset-0 z-50 bg-black/50"
-			onClick={() => onOpenChange(false)}
-			onKeyDown={handleKeyDown}
-		>
+		// biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismiss
+		// biome-ignore lint/a11y/noStaticElementInteractions: backdrop overlay
+		<div className="fixed inset-0 z-50 bg-black/50" onClick={() => onOpenChange(false)}>
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: palette container */}
 			<div
 				className="mx-auto mt-[20vh] w-full max-w-lg rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] shadow-2xl"
 				onClick={(e) => e.stopPropagation()}
+				onKeyDown={handleKeyDown}
 			>
 				<div className="flex items-center gap-2 border-b border-[var(--color-border)] px-3">
 					<Search className="h-4 w-4 shrink-0 text-[var(--color-text-secondary)]" />
