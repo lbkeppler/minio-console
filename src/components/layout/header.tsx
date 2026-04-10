@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import { Globe, Monitor, Moon, Search, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import { CommandPalette } from "@/components/shared/command-palette";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,

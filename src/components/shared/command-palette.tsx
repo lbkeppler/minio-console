@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
 	Box,
 	FolderOpen,
@@ -11,6 +9,8 @@ import {
 	Users,
 	UsersRound,
 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CommandItem {
 	label: string;
@@ -25,9 +25,24 @@ const commands: CommandItem[] = [
 	{ label: "Users", path: "/users", icon: Users, keywords: ["user", "account", "iam"] },
 	{ label: "Groups", path: "/groups", icon: UsersRound, keywords: ["group", "team"] },
 	{ label: "Policies", path: "/policies", icon: Shield, keywords: ["policy", "permission", "iam"] },
-	{ label: "Monitoring", path: "/monitoring", icon: Monitor, keywords: ["monitor", "metrics", "health"] },
-	{ label: "MC Terminal", path: "/terminal", icon: Terminal, keywords: ["terminal", "mc", "cli", "command"] },
-	{ label: "Settings", path: "/settings", icon: Settings, keywords: ["settings", "config", "preferences"] },
+	{
+		label: "Monitoring",
+		path: "/monitoring",
+		icon: Monitor,
+		keywords: ["monitor", "metrics", "health"],
+	},
+	{
+		label: "MC Terminal",
+		path: "/terminal",
+		icon: Terminal,
+		keywords: ["terminal", "mc", "cli", "command"],
+	},
+	{
+		label: "Settings",
+		path: "/settings",
+		icon: Settings,
+		keywords: ["settings", "config", "preferences"],
+	},
 ];
 
 interface CommandPaletteProps {
@@ -45,9 +60,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 		if (!query) return commands;
 		const q = query.toLowerCase();
 		return commands.filter(
-			(cmd) =>
-				cmd.label.toLowerCase().includes(q) ||
-				cmd.keywords.some((kw) => kw.includes(q)),
+			(cmd) => cmd.label.toLowerCase().includes(q) || cmd.keywords.some((kw) => kw.includes(q)),
 		);
 	}, [query]);
 
