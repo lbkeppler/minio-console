@@ -1,5 +1,6 @@
 pub mod commands;
 pub mod config;
+pub mod mc;
 pub mod models;
 pub mod s3;
 
