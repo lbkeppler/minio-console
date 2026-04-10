@@ -92,6 +92,30 @@ pub struct PolicyInfo {
     pub policy: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ServerInfo {
+    pub version: String,
+    pub uptime: String,
+    pub network: String,
+    pub drives_online: i32,
+    pub drives_offline: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DiskInfo {
+    pub path: String,
+    pub total_bytes: u64,
+    pub used_bytes: u64,
+    pub available_bytes: u64,
+    pub usage_percent: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct McCommandResult {
+    pub output: String,
+    pub exit_code: i32,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -198,6 +222,20 @@ mod tests {
         let json = serde_json::to_string(&user).unwrap();
         let deserialized: UserInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.access_key, "testuser");
+    }
+
+    #[test]
+    fn test_server_info_serialization() {
+        let info = ServerInfo {
+            version: "RELEASE.2024-06-01".to_string(),
+            uptime: "3 days".to_string(),
+            network: "1 OK".to_string(),
+            drives_online: 4,
+            drives_offline: 0,
+        };
+        let json = serde_json::to_string(&info).unwrap();
+        let deserialized: ServerInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.version, "RELEASE.2024-06-01");
     }
 
     #[test]

@@ -49,6 +49,9 @@ pub fn run() {
             commands::admin::delete_policy,
             commands::admin::attach_policy,
             commands::admin::detach_policy,
+            commands::monitoring::get_server_info,
+            commands::monitoring::get_disk_usage,
+            commands::terminal::run_mc_command,
         ])
         .setup(|app| {
             #[cfg(debug_assertions)]
