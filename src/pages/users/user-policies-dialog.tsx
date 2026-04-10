@@ -88,7 +88,7 @@ export function UserPoliciesDialog({
 						<select
 							value={selectedPolicy}
 							onChange={(e) => setSelectedPolicy(e.target.value)}
-							className="flex-1 rounded-md border border-[var(--color-border)] bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+							className="flex-1 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] text-[var(--color-text)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] [&>option]:bg-[var(--color-bg-secondary)] [&>option]:text-[var(--color-text)]"
 						>
 							<option value="">Select a policy...</option>
 							{availablePolicies.map((p) => (
