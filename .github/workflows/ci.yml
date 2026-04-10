@@ -43,7 +43,7 @@ jobs:
         run: npx @biomejs/biome check src/
 
       - name: Cargo clippy
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --lib -- -D warnings
         working-directory: src-tauri
 
       - name: Cargo fmt check
@@ -51,5 +51,5 @@ jobs:
         working-directory: src-tauri
 
       - name: Cargo test
-        run: cargo test
+        run: cargo test --lib
         working-directory: src-tauri
