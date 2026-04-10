@@ -6,8 +6,17 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
         "mc (MinIO Client) not found in PATH. Please install mc and ensure it's in your PATH.",
     )?;
 
+    // Use a dedicated config dir to avoid permission conflicts with user's mc config
+    let mc_config_dir = dirs::config_dir()
+        .expect("Could not determine config directory")
+        .join("minio-console")
+        .join("mc");
+    std::fs::create_dir_all(&mc_config_dir)
+        .map_err(|e| format!("Failed to create mc config dir: {}", e))?;
+
     let output = Command::new(&mc_path)
         .args(args)
+        .env("MC_CONFIG_DIR", &mc_config_dir)
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .output()

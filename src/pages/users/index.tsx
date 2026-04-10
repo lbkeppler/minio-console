@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Loader2, Plus, Trash2, User } from "lucide-react";
+import { Loader2, Plus, Shield, Trash2, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -7,6 +7,7 @@ import { type UserInfo, useAdminStore } from "@/stores/admin-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
 import { CreateUserDialog } from "./create-user-dialog";
+import { UserPoliciesDialog } from "./user-policies-dialog";
 
 const columns: ColumnDef<UserInfo, string>[] = [
 	{
@@ -48,6 +49,7 @@ export function UsersPage() {
 	const { config } = useProfileStore();
 	const { addToast } = useToastStore();
 	const [createOpen, setCreateOpen] = useState(false);
+	const [policiesUser, setPoliciesUser] = useState<UserInfo | null>(null);
 
 	const hasActiveProfile = !!config?.active_profile_id;
 
@@ -93,7 +95,17 @@ export function UsersPage() {
 			id: "actions",
 			header: "",
 			cell: ({ row }) => (
-				<div className="flex justify-end">
+				<div className="flex justify-end gap-1">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={(e) => {
+							e.stopPropagation();
+							setPoliciesUser(row.original);
+						}}
+					>
+						<Shield className="h-4 w-4" />
+					</Button>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -126,6 +138,17 @@ export function UsersPage() {
 			<DataTable columns={columnsWithActions} data={users} />
 
 			<CreateUserDialog open={createOpen} onOpenChange={setCreateOpen} />
+			{policiesUser && (
+				<UserPoliciesDialog
+					user={policiesUser}
+					open={!!policiesUser}
+					onOpenChange={(open) => {
+						if (!open) {
+							setPoliciesUser(null);
+						}
+					}}
+				/>
+			)}
 		</div>
 	);
 }

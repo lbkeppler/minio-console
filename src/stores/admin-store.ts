@@ -41,8 +41,8 @@ interface AdminStore {
 	getPolicy: (name: string) => Promise<PolicyInfo>;
 	createPolicy: (name: string, policy: string) => Promise<void>;
 	deletePolicy: (name: string) => Promise<void>;
-	attachPolicy: (policy: string, entityType: string, entityName: string) => Promise<void>;
-	detachPolicy: (policy: string, entityType: string, entityName: string) => Promise<void>;
+	attachPolicy: (policy: string, user?: string, group?: string) => Promise<void>;
+	detachPolicy: (policy: string, user?: string, group?: string) => Promise<void>;
 }
 
 export const useAdminStore = create<AdminStore>((set, get) => ({
@@ -120,10 +120,10 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
 		await invoke("delete_policy", { name });
 		await get().loadPolicies();
 	},
-	attachPolicy: async (policy, entityType, entityName) => {
-		await invoke("attach_policy", { policy, entityType, entityName });
+	attachPolicy: async (policy, user, group) => {
+		await invoke("attach_policy", { policy, user: user ?? null, group: group ?? null });
 	},
-	detachPolicy: async (policy, entityType, entityName) => {
-		await invoke("detach_policy", { policy, entityType, entityName });
+	detachPolicy: async (policy, user, group) => {
+		await invoke("detach_policy", { policy, user: user ?? null, group: group ?? null });
 	},
 }));
