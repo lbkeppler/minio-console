@@ -67,18 +67,29 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
 }
 
 /// Find mc binary. Checks in order:
-/// 1. Bundled mc next to our own executable (embedded distribution)
-/// 2. Tauri resources directory (for bundled builds)
-/// 3. System PATH
+/// 1. Tauri sidecar (externalBin) — binary with target triple suffix next to exe
+/// 2. Plain mc/mc.exe next to our own executable
+/// 3. Resources directory (for bundled builds)
+/// 4. System PATH
 pub fn find_mc() -> Option<String> {
     if let Ok(exe_path) = std::env::current_exe() {
         if let Some(exe_dir) = exe_path.parent() {
+            // 1. Tauri sidecar with target triple suffix
+            let sidecar_name = sidecar_binary_name();
+            let sidecar_path = exe_dir.join(&sidecar_name);
+            if sidecar_path.exists() {
+                return Some(sidecar_path.to_string_lossy().to_string());
+            }
+
+            // 2. Plain binary next to exe
             for name in &["mc.exe", "mc"] {
                 let bundled = exe_dir.join(name);
                 if bundled.exists() {
                     return Some(bundled.to_string_lossy().to_string());
                 }
             }
+
+            // 3. Resources directory
             for name in &["mc.exe", "mc"] {
                 let resource = exe_dir.join("resources").join(name);
                 if resource.exists() {
@@ -88,10 +99,22 @@ pub fn find_mc() -> Option<String> {
         }
     }
 
+    // 4. System PATH
     for name in &["mc", "mc.exe"] {
         if which::which(name).is_ok() {
             return Some(name.to_string());
         }
     }
     None
+}
+
+/// Returns the sidecar binary filename with the target triple suffix.
+/// Tauri externalBin names binaries as: `name-<target_triple>[.exe]`
+fn sidecar_binary_name() -> String {
+    let target = env!("TARGET_TRIPLE");
+    if cfg!(windows) {
+        format!("mc-{}.exe", target)
+    } else {
+        format!("mc-{}", target)
+    }
 }
