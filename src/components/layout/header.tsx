@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Monitor, Moon, Search, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CommandPalette } from "@/components/shared/command-palette";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,6 +15,18 @@ import { useThemeStore } from "@/stores/theme-store";
 export function Header() {
 	const { config, setActiveProfile } = useProfileStore();
 	const { theme, setTheme } = useThemeStore();
+	const [paletteOpen, setPaletteOpen] = useState(false);
+
+	useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+				e.preventDefault();
+				setPaletteOpen((prev) => !prev);
+			}
+		};
+		window.addEventListener("keydown", handler);
+		return () => window.removeEventListener("keydown", handler);
+	}, []);
 
 	const activeProfile = config?.profiles.find((p) => p.id === config.active_profile_id);
 
@@ -45,7 +59,12 @@ export function Header() {
 			</div>
 
 			<div className="flex items-center gap-2">
-				<Button variant="ghost" size="sm" className="gap-2 text-[var(--color-text-secondary)]">
+				<Button
+					variant="ghost"
+					size="sm"
+					className="gap-2 text-[var(--color-text-secondary)]"
+					onClick={() => setPaletteOpen(true)}
+				>
 					<Search className="h-4 w-4" />
 					<span className="text-xs">Ctrl+K</span>
 				</Button>
@@ -70,6 +89,8 @@ export function Header() {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
+
+			<CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
 		</header>
 	);
 }
