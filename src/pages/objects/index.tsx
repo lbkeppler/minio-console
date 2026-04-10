@@ -7,6 +7,8 @@ import { DataTable } from "@/components/ui/data-table";
 import { type ObjectInfo, useObjectStore } from "@/stores/object-store";
 import { useToastStore } from "@/stores/toast-store";
 import { ObjectActions } from "./object-actions";
+import { ObjectPreview } from "./object-preview";
+import { SearchBar } from "./search-bar";
 import { UploadDialog } from "./upload-dialog";
 
 function formatSize(bytes: number): string {
@@ -24,6 +26,7 @@ export function ObjectsPage() {
 	const { objects, loading, currentBucket, setBucket, setPrefix, loadObjects } = useObjectStore();
 	const { addToast } = useToastStore();
 	const [uploadOpen, setUploadOpen] = useState(false);
+	const [previewKey, setPreviewKey] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (bucket) {
@@ -142,15 +145,36 @@ export function ObjectsPage() {
 				))}
 			</nav>
 
-			<DataTable
-				columns={columns}
-				data={objects}
-				onRowClick={(obj) => {
-					if (obj.is_prefix) {
-						navigateToPrefix(obj.key);
-					}
+			<SearchBar
+				onSearch={(query) => {
+					navigateToPrefix(query ? prefix + query : prefix);
 				}}
 			/>
+
+			<div className="flex gap-4">
+				<div className={previewKey ? "w-1/2" : "w-full"}>
+					<DataTable
+						columns={columns}
+						data={objects}
+						onRowClick={(obj) => {
+							if (obj.is_prefix) {
+								navigateToPrefix(obj.key);
+							} else {
+								setPreviewKey(obj.key);
+							}
+						}}
+					/>
+				</div>
+				{previewKey && (
+					<div className="w-1/2">
+						<ObjectPreview
+							bucket={bucket}
+							objectKey={previewKey}
+							onClose={() => setPreviewKey(null)}
+						/>
+					</div>
+				)}
+			</div>
 
 			<UploadDialog open={uploadOpen} onOpenChange={setUploadOpen} />
 		</div>
