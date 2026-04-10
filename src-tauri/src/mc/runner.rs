@@ -22,11 +22,21 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
     // Serialize all mc calls to prevent concurrent config.json writes
     let _guard = MC_LOCK.lock().await;
 
-    let output = Command::new(&mc_path)
-        .args(args)
+    let mut cmd = Command::new(&mc_path);
+    cmd.args(args)
         .env("MC_CONFIG_DIR", &mc_config_dir)
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
+        .stderr(Stdio::piped());
+
+    // On Windows, prevent a visible CMD window from flashing
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        cmd.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    let output = cmd
         .output()
         .await
         .map_err(|e| format!("Failed to execute mc: {}", e))?;
@@ -37,16 +47,24 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
 
     if !output.status.success() {
-        if let Ok(json) = serde_json::from_str::<serde_json::Value>(&stdout) {
-            if let Some(msg) = json
-                .get("error")
-                .and_then(|e| e.get("message"))
-                .and_then(|m| m.as_str())
-            {
-                return Err(msg.to_string());
+        // Try to extract error message from JSON output
+        for line in stdout.lines().chain(stderr.lines()) {
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(line) {
+                if let Some(msg) = json
+                    .get("error")
+                    .and_then(|e| e.get("message"))
+                    .and_then(|m| m.as_str())
+                {
+                    return Err(msg.to_string());
+                }
             }
         }
-        return Err(if stderr.is_empty() { stdout } else { stderr });
+        let combined = if stderr.is_empty() {
+            stdout
+        } else {
+            stderr
+        };
+        return Err(combined.trim().to_string());
     }
 
     Ok(stdout)
@@ -59,14 +77,12 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
 pub fn find_mc() -> Option<String> {
     if let Ok(exe_path) = std::env::current_exe() {
         if let Some(exe_dir) = exe_path.parent() {
-            // Check next to executable
             for name in &["mc.exe", "mc"] {
                 let bundled = exe_dir.join(name);
                 if bundled.exists() {
                     return Some(bundled.to_string_lossy().to_string());
                 }
             }
-            // Check Tauri resources directory (Windows: same as exe dir for resources)
             for name in &["mc.exe", "mc"] {
                 let resource = exe_dir.join("resources").join(name);
                 if resource.exists() {
@@ -76,7 +92,6 @@ pub fn find_mc() -> Option<String> {
         }
     }
 
-    // Fall back to PATH
     for name in &["mc", "mc.exe"] {
         if which::which(name).is_ok() {
             return Some(name.to_string());
