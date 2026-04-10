@@ -1,3 +1,4 @@
+pub mod commands;
 pub mod config;
 pub mod models;
 
@@ -7,6 +8,14 @@ use tauri::Manager;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![
+            commands::profiles::get_config,
+            commands::profiles::add_profile,
+            commands::profiles::update_profile,
+            commands::profiles::delete_profile,
+            commands::profiles::set_active_profile,
+            commands::connection::test_connection,
+        ])
         .setup(|app| {
             #[cfg(debug_assertions)]
             {
