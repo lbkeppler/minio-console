@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Database, Loader2, Plus, Trash2 } from "lucide-react";
+import { Database, Loader2, Plus, Settings, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -80,6 +80,16 @@ export function BucketsPage() {
 			header: "",
 			cell: ({ row }) => (
 				<div className="flex justify-end">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={(e) => {
+							e.stopPropagation();
+							navigate(`/buckets/settings?bucket=${row.original.name}`);
+						}}
+					>
+						<Settings className="h-4 w-4" />
+					</Button>
 					<Button
 						variant="ghost"
 						size="icon"
