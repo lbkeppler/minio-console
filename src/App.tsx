@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "@/components/layout/app-layout";
+import { BucketSettingsPage } from "@/pages/buckets/bucket-settings";
 import { BucketsPage } from "@/pages/buckets/index";
 import { DashboardPage } from "@/pages/dashboard/index";
 import { GroupsPage } from "@/pages/groups/index";
@@ -25,6 +26,7 @@ export function App() {
 				<Route element={<AppLayout />}>
 					<Route path="/" element={<DashboardPage />} />
 					<Route path="/buckets" element={<BucketsPage />} />
+					<Route path="/buckets/settings" element={<BucketSettingsPage />} />
 					<Route path="/objects" element={<ObjectsPage />} />
 					<Route path="/users" element={<UsersPage />} />
 					<Route path="/groups" element={<GroupsPage />} />

@@ -49,6 +49,28 @@ pub struct PresignedUrlResult {
     pub expires_in_secs: u64,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BucketConfig {
+    pub versioning: String,
+    pub policy: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LifecycleRule {
+    pub id: String,
+    pub prefix: String,
+    pub status: String,
+    pub expiration_days: Option<i32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ObjectContent {
+    pub content_type: String,
+    pub size: i64,
+    pub data: String,
+    pub is_text: bool,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -118,5 +140,30 @@ mod tests {
         let deserialized: ObjectInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.key, "photos/cat.jpg");
         assert!(!deserialized.is_prefix);
+    }
+
+    #[test]
+    fn test_bucket_config_serialization() {
+        let config = BucketConfig {
+            versioning: "Enabled".to_string(),
+            policy: Some(r#"{"Version":"2012-10-17"}"#.to_string()),
+        };
+        let json = serde_json::to_string(&config).unwrap();
+        let deserialized: BucketConfig = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.versioning, "Enabled");
+        assert!(deserialized.policy.is_some());
+    }
+
+    #[test]
+    fn test_lifecycle_rule_serialization() {
+        let rule = LifecycleRule {
+            id: "expire-logs".to_string(),
+            prefix: "logs/".to_string(),
+            status: "Enabled".to_string(),
+            expiration_days: Some(30),
+        };
+        let json = serde_json::to_string(&rule).unwrap();
+        let deserialized: LifecycleRule = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.expiration_days, Some(30));
     }
 }
