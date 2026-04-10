@@ -1,8 +1,121 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { ColumnDef } from "@tanstack/react-table";
+import { useBucketStore, type BucketInfo } from "@/stores/bucket-store";
+import { useProfileStore } from "@/stores/profile-store";
+import { useToastStore } from "@/stores/toast-store";
+import { DataTable } from "@/components/ui/data-table";
+import { Button } from "@/components/ui/button";
+import { CreateBucketDialog } from "./create-bucket-dialog";
+import { Plus, Trash2, Database, Loader2 } from "lucide-react";
+
+const columns: ColumnDef<BucketInfo, string>[] = [
+	{
+		accessorKey: "name",
+		header: "Name",
+		cell: ({ row }) => (
+			<div className="flex items-center gap-2">
+				<Database className="h-4 w-4 text-[var(--color-accent)]" />
+				<span className="font-medium">{row.original.name}</span>
+			</div>
+		),
+	},
+	{
+		accessorKey: "creation_date",
+		header: "Created",
+		cell: ({ row }) =>
+			row.original.creation_date
+				? new Date(row.original.creation_date).toLocaleDateString()
+				: "—",
+	},
+];
+
 export function BucketsPage() {
+	const { buckets, loading, loadBuckets, deleteBucket } = useBucketStore();
+	const { config } = useProfileStore();
+	const { addToast } = useToastStore();
+	const navigate = useNavigate();
+	const [createOpen, setCreateOpen] = useState(false);
+
+	const hasActiveProfile = !!config?.active_profile_id;
+
+	useEffect(() => {
+		if (hasActiveProfile) {
+			loadBuckets().catch((err) => {
+				addToast({
+					title: "Error loading buckets",
+					description: String(err),
+					variant: "error",
+				});
+			});
+		}
+	}, [hasActiveProfile, loadBuckets, addToast]);
+
+	if (!hasActiveProfile) {
+		return (
+			<div className="space-y-4">
+				<h1 className="text-2xl font-semibold">Buckets</h1>
+				<p className="text-[var(--color-text-secondary)]">
+					Select a server profile first to view buckets.
+				</p>
+			</div>
+		);
+	}
+
+	async function handleDelete(name: string) {
+		try {
+			await deleteBucket(name);
+			addToast({ title: `Bucket "${name}" deleted`, variant: "success" });
+		} catch (err) {
+			addToast({
+				title: "Error deleting bucket",
+				description: String(err),
+				variant: "error",
+			});
+		}
+	}
+
+	const columnsWithActions: ColumnDef<BucketInfo, string>[] = [
+		...columns,
+		{
+			id: "actions",
+			header: "",
+			cell: ({ row }) => (
+				<div className="flex justify-end">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={(e) => {
+							e.stopPropagation();
+							handleDelete(row.original.name);
+						}}
+					>
+						<Trash2 className="h-4 w-4 text-[var(--color-danger)]" />
+					</Button>
+				</div>
+			),
+		},
+	];
+
 	return (
 		<div className="space-y-4">
-			<h1 className="text-2xl font-semibold">Buckets</h1>
-			<p className="text-[var(--color-text-secondary)]">Coming in Phase 2.</p>
+			<div className="flex items-center justify-between">
+				<h1 className="text-2xl font-semibold">Buckets</h1>
+				<div className="flex items-center gap-2">
+					{loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />}
+					<Button onClick={() => setCreateOpen(true)} size="sm">
+						<Plus className="h-4 w-4" /> Create Bucket
+					</Button>
+				</div>
+			</div>
+
+			<DataTable
+				columns={columnsWithActions}
+				data={buckets}
+				onRowClick={(bucket) => navigate(`/objects?bucket=${bucket.name}`)}
+			/>
+
+			<CreateBucketDialog open={createOpen} onOpenChange={setCreateOpen} />
 		</div>
 	);
 }
