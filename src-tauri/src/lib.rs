@@ -1,5 +1,6 @@
 pub mod commands;
 pub mod config;
+pub mod mc;
 pub mod models;
 pub mod s3;
 
@@ -34,6 +35,20 @@ pub fn run() {
             commands::bucket_config::get_lifecycle_rules,
             commands::bucket_config::put_lifecycle_rule,
             commands::bucket_config::delete_lifecycle_rule,
+            commands::admin::list_users,
+            commands::admin::create_user,
+            commands::admin::delete_user,
+            commands::admin::list_groups,
+            commands::admin::create_group,
+            commands::admin::delete_group,
+            commands::admin::add_group_members,
+            commands::admin::remove_group_members,
+            commands::admin::list_policies,
+            commands::admin::get_policy,
+            commands::admin::create_policy,
+            commands::admin::delete_policy,
+            commands::admin::attach_policy,
+            commands::admin::detach_policy,
         ])
         .setup(|app| {
             #[cfg(debug_assertions)]

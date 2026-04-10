@@ -8,6 +8,7 @@ import { GroupsPage } from "@/pages/groups/index";
 import { MonitoringPage } from "@/pages/monitoring/index";
 import { ObjectsPage } from "@/pages/objects/index";
 import { PoliciesPage } from "@/pages/policies/index";
+import { PolicyEditorPage } from "@/pages/policies/policy-editor";
 import { SettingsPage } from "@/pages/settings/index";
 import { TerminalPage } from "@/pages/terminal/index";
 import { UsersPage } from "@/pages/users/index";
@@ -31,6 +32,7 @@ export function App() {
 					<Route path="/users" element={<UsersPage />} />
 					<Route path="/groups" element={<GroupsPage />} />
 					<Route path="/policies" element={<PoliciesPage />} />
+					<Route path="/policies/editor" element={<PolicyEditorPage />} />
 					<Route path="/monitoring" element={<MonitoringPage />} />
 					<Route path="/terminal" element={<TerminalPage />} />
 					<Route path="/settings" element={<SettingsPage />} />

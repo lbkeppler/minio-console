@@ -1,3 +1,4 @@
+pub mod admin;
 pub mod bucket_config;
 pub mod buckets;
 pub mod connection;

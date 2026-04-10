@@ -71,6 +71,27 @@ pub struct ObjectContent {
     pub is_text: bool,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserInfo {
+    pub access_key: String,
+    pub status: String,
+    pub policies: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GroupInfo {
+    pub name: String,
+    pub status: String,
+    pub members: Vec<String>,
+    pub policies: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PolicyInfo {
+    pub name: String,
+    pub policy: String,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -165,5 +186,30 @@ mod tests {
         let json = serde_json::to_string(&rule).unwrap();
         let deserialized: LifecycleRule = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.expiration_days, Some(30));
+    }
+
+    #[test]
+    fn test_user_info_serialization() {
+        let user = UserInfo {
+            access_key: "testuser".to_string(),
+            status: "enabled".to_string(),
+            policies: vec!["readwrite".to_string()],
+        };
+        let json = serde_json::to_string(&user).unwrap();
+        let deserialized: UserInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.access_key, "testuser");
+    }
+
+    #[test]
+    fn test_group_info_serialization() {
+        let group = GroupInfo {
+            name: "developers".to_string(),
+            status: "enabled".to_string(),
+            members: vec!["user1".to_string()],
+            policies: vec!["readwrite".to_string()],
+        };
+        let json = serde_json::to_string(&group).unwrap();
+        let deserialized: GroupInfo = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.name, "developers");
     }
 }
