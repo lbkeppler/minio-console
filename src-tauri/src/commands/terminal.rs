@@ -4,7 +4,14 @@ use crate::models::types::McCommandResult;
 /// Known mc admin subcommands that have a sub-subcommand before the alias.
 /// Format: mc admin <group> <action> ALIAS [args...]
 const ADMIN_TWO_LEVEL: &[&str] = &[
-    "user", "group", "policy", "config", "bucket", "replicate", "idp", "kms",
+    "user",
+    "group",
+    "policy",
+    "config",
+    "bucket",
+    "replicate",
+    "idp",
+    "kms",
 ];
 
 #[tauri::command]
@@ -21,9 +28,7 @@ pub async fn run_mc_command(command: String) -> Result<McCommandResult, String> 
     let mut args: Vec<String> = Vec::new();
 
     if parts[0] == "admin" {
-        if parts.len() >= 3
-            && ADMIN_TWO_LEVEL.contains(&parts[1].as_str())
-        {
+        if parts.len() >= 3 && ADMIN_TWO_LEVEL.contains(&parts[1].as_str()) {
             // mc admin user list ALIAS [extra...]
             // mc admin policy attach ALIAS [extra...]
             args.push(parts[0].clone()); // admin
@@ -65,7 +70,11 @@ pub async fn run_mc_command(command: String) -> Result<McCommandResult, String> 
                 args.push(first_arg.clone());
             } else {
                 // It's a path, prepend alias
-                args.push(format!("{}/{}", alias_name, first_arg.trim_start_matches('/')));
+                args.push(format!(
+                    "{}/{}",
+                    alias_name,
+                    first_arg.trim_start_matches('/')
+                ));
             }
             for part in &parts[2..] {
                 args.push(part.clone());
@@ -113,13 +122,13 @@ fn format_output(raw: &str) -> String {
                 if status == "success" {
                     parts.push("OK".to_string());
                 } else if status == "error" {
-                    if let Some(msg) =
-                        json.get("error").and_then(|e| {
-                            e.as_str().map(|s| s.to_string()).or_else(|| {
-                                e.get("message").and_then(|m| m.as_str()).map(|s| s.to_string())
-                            })
+                    if let Some(msg) = json.get("error").and_then(|e| {
+                        e.as_str().map(|s| s.to_string()).or_else(|| {
+                            e.get("message")
+                                .and_then(|m| m.as_str())
+                                .map(|s| s.to_string())
                         })
-                    {
+                    }) {
                         parts.push(format!("ERROR: {}", msg));
                     } else {
                         parts.push("ERROR".to_string());

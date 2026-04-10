@@ -59,11 +59,7 @@ pub async fn run_mc(args: &[&str]) -> Result<String, String> {
                 }
             }
         }
-        let combined = if stderr.is_empty() {
-            stdout
-        } else {
-            stderr
-        };
+        let combined = if stderr.is_empty() { stdout } else { stderr };
         return Err(combined.trim().to_string());
     }
 

@@ -8,7 +8,9 @@ pub async fn get_server_info() -> Result<ServerInfo, String> {
     let json_output = runner::run_mc(&["admin", "info", &al, "--json"]).await?;
 
     // Also get plain text output for version/uptime (not in JSON format)
-    let text_output = runner::run_mc(&["admin", "info", &al]).await.unwrap_or_default();
+    let text_output = runner::run_mc(&["admin", "info", &al])
+        .await
+        .unwrap_or_default();
 
     // Parse JSON
     let mut online_disks = 0i32;
@@ -31,16 +33,10 @@ pub async fn get_server_info() -> Result<ServerInfo, String> {
                         .unwrap_or(0) as i32;
                 }
                 if let Some(buckets) = info.get("buckets") {
-                    bucket_count = buckets
-                        .get("count")
-                        .and_then(|v| v.as_u64())
-                        .unwrap_or(0);
+                    bucket_count = buckets.get("count").and_then(|v| v.as_u64()).unwrap_or(0);
                 }
                 if let Some(usage) = info.get("usage") {
-                    total_usage = usage
-                        .get("size")
-                        .and_then(|v| v.as_u64())
-                        .unwrap_or(0);
+                    total_usage = usage.get("size").and_then(|v| v.as_u64()).unwrap_or(0);
                 }
             }
 
@@ -107,13 +103,30 @@ pub async fn get_server_info() -> Result<ServerInfo, String> {
 
     // Add usage info to version if available
     if !version.is_empty() && total_usage > 0 {
-        version = format!("{} ({} buckets, {} used)", version, bucket_count, format_bytes(total_usage));
+        version = format!(
+            "{} ({} buckets, {} used)",
+            version,
+            bucket_count,
+            format_bytes(total_usage)
+        );
     }
 
     Ok(ServerInfo {
-        version: if version.is_empty() { "N/A".to_string() } else { version },
-        uptime: if uptime.is_empty() { "N/A".to_string() } else { uptime },
-        network: if network.is_empty() { "N/A".to_string() } else { network },
+        version: if version.is_empty() {
+            "N/A".to_string()
+        } else {
+            version
+        },
+        uptime: if uptime.is_empty() {
+            "N/A".to_string()
+        } else {
+            uptime
+        },
+        network: if network.is_empty() {
+            "N/A".to_string()
+        } else {
+            network
+        },
         drives_online: online_disks,
         drives_offline: offline_disks,
     })
