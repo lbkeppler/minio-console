@@ -1,0 +1,161 @@
+{
+	"nav": {
+		"buckets": "Buckets",
+		"objects": "Objetos",
+		"users": "Usuários",
+		"groups": "Grupos",
+		"policies": "Políticas",
+		"monitoring": "Monitoramento",
+		"terminal": "Terminal MC",
+		"settings": "Configurações"
+	},
+	"common": {
+		"create": "Criar",
+		"delete": "Excluir",
+		"save": "Salvar",
+		"cancel": "Cancelar",
+		"edit": "Editar",
+		"close": "Fechar",
+		"confirm": "Confirmar",
+		"search": "Buscar",
+		"loading": "Carregando...",
+		"noResults": "Nenhum resultado encontrado",
+		"actions": "Ações",
+		"name": "Nome",
+		"status": "Status",
+		"size": "Tamanho",
+		"date": "Data",
+		"type": "Tipo",
+		"description": "Descrição",
+		"enabled": "Ativado",
+		"disabled": "Desativado",
+		"yes": "Sim",
+		"no": "Não",
+		"back": "Voltar",
+		"next": "Próximo",
+		"refresh": "Atualizar",
+		"download": "Baixar",
+		"upload": "Enviar"
+	},
+	"header": {
+		"noServerSelected": "Nenhum servidor selecionado",
+		"noProfilesConfigured": "Nenhum perfil configurado",
+		"active": "ativo",
+		"searchShortcut": "Ctrl+K",
+		"theme": {
+			"light": "Claro",
+			"dark": "Escuro",
+			"system": "Sistema"
+		},
+		"language": {
+			"label": "Idioma",
+			"en": "English",
+			"ptBR": "Português (BR)"
+		}
+	},
+	"footer": {
+		"notConnected": "Não conectado"
+	},
+	"pages": {
+		"dashboard": {
+			"title": "Painel",
+			"totalBuckets": "Total de Buckets",
+			"totalObjects": "Total de Objetos",
+			"storageUsed": "Armazenamento Usado",
+			"serverUptime": "Tempo Ativo do Servidor"
+		},
+		"buckets": {
+			"title": "Buckets",
+			"createBucket": "Criar Bucket",
+			"deleteBucket": "Excluir Bucket",
+			"bucketName": "Nome do Bucket",
+			"versioning": "Versionamento",
+			"objectLocking": "Bloqueio de Objetos",
+			"quota": "Cota",
+			"replication": "Replicação",
+			"lifecycle": "Ciclo de Vida",
+			"accessPolicy": "Política de Acesso",
+			"encryption": "Criptografia",
+			"tags": "Tags",
+			"events": "Eventos"
+		},
+		"objects": {
+			"title": "Objetos",
+			"uploadObject": "Enviar Objeto",
+			"deleteObject": "Excluir Objeto",
+			"objectName": "Nome do Objeto",
+			"lastModified": "Última Modificação",
+			"contentType": "Tipo de Conteúdo",
+			"createFolder": "Criar Pasta",
+			"preview": "Visualizar",
+			"metadata": "Metadados",
+			"share": "Compartilhar",
+			"shareLink": "Link de Compartilhamento"
+		},
+		"users": {
+			"title": "Usuários",
+			"createUser": "Criar Usuário",
+			"deleteUser": "Excluir Usuário",
+			"accessKey": "Chave de Acesso",
+			"secretKey": "Chave Secreta",
+			"userStatus": "Status do Usuário",
+			"assignedPolicies": "Políticas Atribuídas",
+			"memberOfGroups": "Membro dos Grupos"
+		},
+		"groups": {
+			"title": "Grupos",
+			"createGroup": "Criar Grupo",
+			"deleteGroup": "Excluir Grupo",
+			"groupName": "Nome do Grupo",
+			"members": "Membros",
+			"groupPolicies": "Políticas do Grupo"
+		},
+		"policies": {
+			"title": "Políticas",
+			"createPolicy": "Criar Política",
+			"deletePolicy": "Excluir Política",
+			"policyName": "Nome da Política",
+			"policyDocument": "Documento da Política",
+			"builtIn": "Nativa",
+			"custom": "Personalizada"
+		},
+		"monitoring": {
+			"title": "Monitoramento",
+			"serverInfo": "Informações do Servidor",
+			"metrics": "Métricas",
+			"audit": "Log de Auditoria",
+			"healthCheck": "Verificação de Saúde",
+			"drives": "Discos",
+			"network": "Rede"
+		},
+		"terminal": {
+			"title": "Terminal MC",
+			"placeholder": "Digite um comando...",
+			"clear": "Limpar",
+			"history": "Histórico"
+		},
+		"settings": {
+			"title": "Configurações",
+			"profiles": "Perfis de Servidor",
+			"addProfile": "Adicionar Perfil",
+			"editProfile": "Editar Perfil",
+			"deleteProfile": "Excluir Perfil",
+			"alias": "Alias",
+			"endpoint": "Endpoint",
+			"appearance": "Aparência",
+			"general": "Geral",
+			"about": "Sobre"
+		}
+	},
+	"errors": {
+		"generic": "Ocorreu um erro. Tente novamente.",
+		"connectionFailed": "Falha ao conectar ao servidor.",
+		"unauthorized": "Você não tem autorização para realizar esta ação.",
+		"notFound": "O recurso solicitado não foi encontrado.",
+		"timeout": "A requisição expirou. Tente novamente.",
+		"invalidCredentials": "Credenciais inválidas. Verifique sua chave de acesso e chave secreta.",
+		"bucketAlreadyExists": "Já existe um bucket com este nome.",
+		"bucketNotEmpty": "O bucket não está vazio. Exclua todos os objetos primeiro.",
+		"policyInUse": "Esta política está em uso e não pode ser excluída."
+	}
+}

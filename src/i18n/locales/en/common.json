@@ -1,0 +1,161 @@
+{
+	"nav": {
+		"buckets": "Buckets",
+		"objects": "Objects",
+		"users": "Users",
+		"groups": "Groups",
+		"policies": "Policies",
+		"monitoring": "Monitoring",
+		"terminal": "MC Terminal",
+		"settings": "Settings"
+	},
+	"common": {
+		"create": "Create",
+		"delete": "Delete",
+		"save": "Save",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"close": "Close",
+		"confirm": "Confirm",
+		"search": "Search",
+		"loading": "Loading...",
+		"noResults": "No results found",
+		"actions": "Actions",
+		"name": "Name",
+		"status": "Status",
+		"size": "Size",
+		"date": "Date",
+		"type": "Type",
+		"description": "Description",
+		"enabled": "Enabled",
+		"disabled": "Disabled",
+		"yes": "Yes",
+		"no": "No",
+		"back": "Back",
+		"next": "Next",
+		"refresh": "Refresh",
+		"download": "Download",
+		"upload": "Upload"
+	},
+	"header": {
+		"noServerSelected": "No server selected",
+		"noProfilesConfigured": "No profiles configured",
+		"active": "active",
+		"searchShortcut": "Ctrl+K",
+		"theme": {
+			"light": "Light",
+			"dark": "Dark",
+			"system": "System"
+		},
+		"language": {
+			"label": "Language",
+			"en": "English",
+			"ptBR": "Português (BR)"
+		}
+	},
+	"footer": {
+		"notConnected": "Not connected"
+	},
+	"pages": {
+		"dashboard": {
+			"title": "Dashboard",
+			"totalBuckets": "Total Buckets",
+			"totalObjects": "Total Objects",
+			"storageUsed": "Storage Used",
+			"serverUptime": "Server Uptime"
+		},
+		"buckets": {
+			"title": "Buckets",
+			"createBucket": "Create Bucket",
+			"deleteBucket": "Delete Bucket",
+			"bucketName": "Bucket Name",
+			"versioning": "Versioning",
+			"objectLocking": "Object Locking",
+			"quota": "Quota",
+			"replication": "Replication",
+			"lifecycle": "Lifecycle",
+			"accessPolicy": "Access Policy",
+			"encryption": "Encryption",
+			"tags": "Tags",
+			"events": "Events"
+		},
+		"objects": {
+			"title": "Objects",
+			"uploadObject": "Upload Object",
+			"deleteObject": "Delete Object",
+			"objectName": "Object Name",
+			"lastModified": "Last Modified",
+			"contentType": "Content Type",
+			"createFolder": "Create Folder",
+			"preview": "Preview",
+			"metadata": "Metadata",
+			"share": "Share",
+			"shareLink": "Share Link"
+		},
+		"users": {
+			"title": "Users",
+			"createUser": "Create User",
+			"deleteUser": "Delete User",
+			"accessKey": "Access Key",
+			"secretKey": "Secret Key",
+			"userStatus": "User Status",
+			"assignedPolicies": "Assigned Policies",
+			"memberOfGroups": "Member of Groups"
+		},
+		"groups": {
+			"title": "Groups",
+			"createGroup": "Create Group",
+			"deleteGroup": "Delete Group",
+			"groupName": "Group Name",
+			"members": "Members",
+			"groupPolicies": "Group Policies"
+		},
+		"policies": {
+			"title": "Policies",
+			"createPolicy": "Create Policy",
+			"deletePolicy": "Delete Policy",
+			"policyName": "Policy Name",
+			"policyDocument": "Policy Document",
+			"builtIn": "Built-in",
+			"custom": "Custom"
+		},
+		"monitoring": {
+			"title": "Monitoring",
+			"serverInfo": "Server Info",
+			"metrics": "Metrics",
+			"audit": "Audit Log",
+			"healthCheck": "Health Check",
+			"drives": "Drives",
+			"network": "Network"
+		},
+		"terminal": {
+			"title": "MC Terminal",
+			"placeholder": "Type a command...",
+			"clear": "Clear",
+			"history": "History"
+		},
+		"settings": {
+			"title": "Settings",
+			"profiles": "Server Profiles",
+			"addProfile": "Add Profile",
+			"editProfile": "Edit Profile",
+			"deleteProfile": "Delete Profile",
+			"alias": "Alias",
+			"endpoint": "Endpoint",
+			"appearance": "Appearance",
+			"general": "General",
+			"about": "About"
+		}
+	},
+	"errors": {
+		"generic": "An error occurred. Please try again.",
+		"connectionFailed": "Failed to connect to the server.",
+		"unauthorized": "You are not authorized to perform this action.",
+		"notFound": "The requested resource was not found.",
+		"timeout": "The request timed out. Please try again.",
+		"invalidCredentials": "Invalid credentials. Please check your access key and secret key.",
+		"bucketAlreadyExists": "A bucket with this name already exists.",
+		"bucketNotEmpty": "The bucket is not empty. Delete all objects first.",
+		"policyInUse": "This policy is currently in use and cannot be deleted."
+	}
+}
