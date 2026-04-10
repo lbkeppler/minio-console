@@ -1,13 +1,13 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import { Database, Loader2, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ColumnDef } from "@tanstack/react-table";
-import { useBucketStore, type BucketInfo } from "@/stores/bucket-store";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { type BucketInfo, useBucketStore } from "@/stores/bucket-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { useToastStore } from "@/stores/toast-store";
-import { DataTable } from "@/components/ui/data-table";
-import { Button } from "@/components/ui/button";
 import { CreateBucketDialog } from "./create-bucket-dialog";
-import { Plus, Trash2, Database, Loader2 } from "lucide-react";
 
 const columns: ColumnDef<BucketInfo, string>[] = [
 	{
@@ -24,9 +24,7 @@ const columns: ColumnDef<BucketInfo, string>[] = [
 		accessorKey: "creation_date",
 		header: "Created",
 		cell: ({ row }) =>
-			row.original.creation_date
-				? new Date(row.original.creation_date).toLocaleDateString()
-				: "—",
+			row.original.creation_date ? new Date(row.original.creation_date).toLocaleDateString() : "—",
 	},
 ];
 
@@ -102,7 +100,9 @@ export function BucketsPage() {
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Buckets</h1>
 				<div className="flex items-center gap-2">
-					{loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />}
+					{loading && (
+						<Loader2 className="h-4 w-4 animate-spin text-[var(--color-text-secondary)]" />
+					)}
 					<Button onClick={() => setCreateOpen(true)} size="sm">
 						<Plus className="h-4 w-4" /> Create Bucket
 					</Button>

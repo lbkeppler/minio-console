@@ -1,5 +1,5 @@
-use aws_sdk_s3::Client;
 use crate::models::{BucketInfo, ObjectInfo, PresignedUrlResult};
+use aws_sdk_s3::Client;
 
 pub async fn list_buckets(client: &Client) -> Result<Vec<BucketInfo>, String> {
     let output = client

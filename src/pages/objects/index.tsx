@@ -1,19 +1,13 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import { ChevronRight, File, FolderOpen, Loader2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { ColumnDef } from "@tanstack/react-table";
-import { useObjectStore, type ObjectInfo } from "@/stores/object-store";
-import { useToastStore } from "@/stores/toast-store";
-import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { type ObjectInfo, useObjectStore } from "@/stores/object-store";
+import { useToastStore } from "@/stores/toast-store";
 import { ObjectActions } from "./object-actions";
 import { UploadDialog } from "./upload-dialog";
-import {
-	FolderOpen,
-	File,
-	Upload,
-	ChevronRight,
-	Loader2,
-} from "lucide-react";
 
 function formatSize(bytes: number): string {
 	if (bytes === 0) return "\u2014";
@@ -27,14 +21,7 @@ export function ObjectsPage() {
 	const bucket = searchParams.get("bucket") ?? "";
 	const prefix = searchParams.get("prefix") ?? "";
 
-	const {
-		objects,
-		loading,
-		currentBucket,
-		setBucket,
-		setPrefix,
-		loadObjects,
-	} = useObjectStore();
+	const { objects, loading, currentBucket, setBucket, setPrefix, loadObjects } = useObjectStore();
 	const { addToast } = useToastStore();
 	const [uploadOpen, setUploadOpen] = useState(false);
 
@@ -94,9 +81,7 @@ export function ObjectsPage() {
 						) : (
 							<File className="h-4 w-4 text-[var(--color-text-tertiary)]" />
 						)}
-						<span className={obj.is_prefix ? "font-medium" : ""}>
-							{displayName}
-						</span>
+						<span className={obj.is_prefix ? "font-medium" : ""}>{displayName}</span>
 					</div>
 				);
 			},
@@ -117,8 +102,7 @@ export function ObjectsPage() {
 		{
 			id: "actions",
 			header: "",
-			cell: ({ row }) =>
-				row.original.is_prefix ? null : <ObjectActions object={row.original} />,
+			cell: ({ row }) => (row.original.is_prefix ? null : <ObjectActions object={row.original} />),
 		},
 	];
 

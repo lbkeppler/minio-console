@@ -1,15 +1,10 @@
+import { open as openDialog } from "@tauri-apps/plugin-dialog";
+import { Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useObjectStore } from "@/stores/object-store";
 import { useToastStore } from "@/stores/toast-store";
-import { Upload, Loader2 } from "lucide-react";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
 
 interface UploadDialogProps {
 	open: boolean;
@@ -63,16 +58,15 @@ export function UploadDialog({ open, onOpenChange }: UploadDialogProps) {
 				</DialogHeader>
 				<div className="space-y-4">
 					<p className="text-sm text-[var(--color-text-secondary)]">
-						Upload to: <code className="rounded bg-[var(--color-bg-tertiary)] px-1 py-0.5">{currentPrefix || "/"}</code>
+						Upload to:{" "}
+						<code className="rounded bg-[var(--color-bg-tertiary)] px-1 py-0.5">
+							{currentPrefix || "/"}
+						</code>
 					</p>
 					<div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-[var(--color-border)] py-8">
 						<Upload className="mb-2 h-8 w-8 text-[var(--color-text-tertiary)]" />
 						<Button onClick={handleSelectFiles} disabled={uploading}>
-							{uploading ? (
-								<Loader2 className="h-4 w-4 animate-spin" />
-							) : (
-								"Select Files"
-							)}
+							{uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Select Files"}
 						</Button>
 					</div>
 				</div>

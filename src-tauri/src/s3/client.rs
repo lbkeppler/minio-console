@@ -28,13 +28,12 @@ pub async fn build_s3_client() -> Result<Client, String> {
     );
 
     let scheme = if profile.use_ssl { "https" } else { "http" };
-    let endpoint = if profile.endpoint.starts_with("http://")
-        || profile.endpoint.starts_with("https://")
-    {
-        profile.endpoint.clone()
-    } else {
-        format!("{}://{}", scheme, profile.endpoint)
-    };
+    let endpoint =
+        if profile.endpoint.starts_with("http://") || profile.endpoint.starts_with("https://") {
+            profile.endpoint.clone()
+        } else {
+            format!("{}://{}", scheme, profile.endpoint)
+        };
 
     let s3_config = S3ConfigBuilder::new()
         .endpoint_url(&endpoint)

@@ -6,8 +6,8 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
@@ -84,8 +84,7 @@ export function DataTable<TData, TValue>({
 								key={row.id}
 								className={cn(
 									"border-b border-[var(--color-border)] last:border-0",
-									onRowClick &&
-										"cursor-pointer hover:bg-[var(--color-bg-secondary)]",
+									onRowClick && "cursor-pointer hover:bg-[var(--color-bg-secondary)]",
 								)}
 								onClick={() => onRowClick?.(row.original)}
 							>

@@ -1,3 +1,5 @@
+import { save } from "@tauri-apps/plugin-dialog";
+import { Download, Link, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -6,10 +8,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useObjectStore, type ObjectInfo } from "@/stores/object-store";
+import { type ObjectInfo, useObjectStore } from "@/stores/object-store";
 import { useToastStore } from "@/stores/toast-store";
-import { MoreHorizontal, Download, Trash2, Link } from "lucide-react";
-import { save } from "@tauri-apps/plugin-dialog";
 
 interface ObjectActionsProps {
 	object: ObjectInfo;

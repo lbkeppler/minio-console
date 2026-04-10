@@ -1,17 +1,12 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { useBucketStore } from "@/stores/bucket-store";
 import { useToastStore } from "@/stores/toast-store";
-import { Loader2 } from "lucide-react";
 
 const bucketSchema = z.object({
 	name: z
@@ -70,26 +65,16 @@ export function CreateBucketDialog({ open, onOpenChange }: CreateBucketDialogPro
 						<label htmlFor="bucket-name" className="text-sm font-medium">
 							Bucket Name
 						</label>
-						<Input
-							id="bucket-name"
-							placeholder="my-bucket"
-							{...register("name")}
-						/>
+						<Input id="bucket-name" placeholder="my-bucket" {...register("name")} />
 						{errors.name && (
-							<p className="text-xs text-[var(--color-danger)]">
-								{errors.name.message}
-							</p>
+							<p className="text-xs text-[var(--color-danger)]">{errors.name.message}</p>
 						)}
 						<p className="text-xs text-[var(--color-text-tertiary)]">
 							Lowercase letters, numbers, hyphens, and periods. 3-63 characters.
 						</p>
 					</div>
 					<div className="flex justify-end gap-2">
-						<Button
-							type="button"
-							variant="ghost"
-							onClick={() => onOpenChange(false)}
-						>
+						<Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
 							Cancel
 						</Button>
 						<Button type="submit" disabled={isSubmitting}>
