@@ -17,7 +17,11 @@ export function Header() {
 	const { t, i18n } = useTranslation();
 	const { config, setActiveProfile } = useProfileStore();
 	const { theme, setTheme } = useThemeStore();
-	const currentLang = i18n.language?.startsWith("pt") ? "pt-BR" : "en";
+	const currentLang = i18n.language?.startsWith("pt")
+		? "pt-BR"
+		: i18n.language?.startsWith("es")
+			? "es"
+			: "en";
 	const [paletteOpen, setPaletteOpen] = useState(false);
 
 	useEffect(() => {
@@ -76,13 +80,21 @@ export function Header() {
 					<DropdownMenuTrigger asChild>
 						<Button variant="ghost" size="sm" className="gap-1 px-2">
 							<Globe className="h-4 w-4" />
-							<span className="text-xs">{currentLang === "pt-BR" ? "PT" : "EN"}</span>
+							<span className="text-xs">
+								{currentLang === "pt-BR" ? "PT" : currentLang === "es" ? "ES" : "EN"}
+							</span>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
 						<DropdownMenuItem onClick={() => i18n.changeLanguage("en")}>
 							{t("header.language.en")}
 							{currentLang === "en" && (
+								<span className="ml-2 text-xs text-[var(--color-accent)]">&#10003;</span>
+							)}
+						</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => i18n.changeLanguage("es")}>
+							{t("header.language.es")}
+							{currentLang === "es" && (
 								<span className="ml-2 text-xs text-[var(--color-accent)]">&#10003;</span>
 							)}
 						</DropdownMenuItem>
