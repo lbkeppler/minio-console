@@ -18,18 +18,26 @@ jobs:
             target: x86_64-pc-windows-msvc
             mc_platform: windows-amd64
             mc_ext: .exe
+            artifact_name: windows
+            artifact_path: |
+              src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+              src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
           - platform: macos-latest
-            target: aarch64-apple-darwin
+            target: universal-apple-darwin
             mc_platform: darwin-arm64
             mc_ext: ""
-          - platform: macos-13
-            target: x86_64-apple-darwin
-            mc_platform: darwin-amd64
-            mc_ext: ""
+            artifact_name: macos-universal
+            artifact_path: src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            extra_targets: aarch64-apple-darwin x86_64-apple-darwin
           - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             mc_platform: linux-amd64
             mc_ext: ""
+            artifact_name: linux
+            artifact_path: |
+              src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/deb/*.deb
+              src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/appimage/*.AppImage
+              src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/rpm/*.rpm
 
     runs-on: ${{ matrix.platform }}
 
@@ -39,13 +47,20 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
-      - name: Install Rust
+      - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
+
+      - name: Install extra Rust targets (macOS universal)
+        if: matrix.extra_targets != ''
+        run: |
+          for t in ${{ matrix.extra_targets }}; do
+            rustup target add $t
+          done
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
@@ -56,12 +71,14 @@ jobs:
             libappindicator3-dev \
             librsvg2-dev \
             patchelf \
-            libgtk-3-dev
+            libgtk-3-dev \
+            rpm
 
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Download mc binary
+      - name: Download mc binary (non-macOS)
+        if: runner.os != 'macOS'
         shell: bash
         run: |
           mkdir -p src-tauri/binaries
@@ -69,24 +86,60 @@ jobs:
           MC_OUT="src-tauri/binaries/mc-${{ matrix.target }}${{ matrix.mc_ext }}"
           curl -fSL "$MC_URL" -o "$MC_OUT"
           chmod +x "$MC_OUT"
-          echo "Downloaded mc to $MC_OUT"
+
+      - name: Download mc binaries (macOS universal — both archs)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          mkdir -p src-tauri/binaries
+          for arch_pair in "aarch64-apple-darwin:darwin-arm64" "x86_64-apple-darwin:darwin-amd64"; do
+            target="${arch_pair%%:*}"
+            platform="${arch_pair##*:}"
+            curl -fSL "https://dl.min.io/client/mc/release/${platform}/mc" \
+              -o "src-tauri/binaries/mc-${target}"
+            chmod +x "src-tauri/binaries/mc-${target}"
+          done
 
       - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tauri build --target ${{ matrix.target }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          tagName: v__VERSION__
-          releaseName: "MinIO Console v__VERSION__"
-          releaseBody: |
-            ## MinIO Console v__VERSION__
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List downloaded files
+        run: find artifacts -type f
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "MinIO Console ${{ github.ref_name }}"
+          draft: true
+          prerelease: false
+          files: artifacts/**/*
+          body: |
+            ## MinIO Console ${{ github.ref_name }}
 
             Cross-platform desktop application for MinIO server management.
 
             ### Downloads
-            - **Windows**: `.msi` installer
-            - **macOS**: `.dmg` disk image
-            - **Linux**: `.deb` package / `.AppImage`
-          releaseDraft: true
-          prerelease: false
-          args: --target ${{ matrix.target }}
+            - **Windows**: `.msi` or `-setup.exe` installer
+            - **macOS** (Universal — Intel + Apple Silicon): `.dmg`
+            - **Linux**: `.deb`, `.rpm`, or `.AppImage`
+
+            The MinIO Client (`mc`) binary is bundled — no extra install required.
