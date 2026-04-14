@@ -13,7 +13,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - uses: dtolnay/rust-toolchain@stable
@@ -35,6 +35,13 @@ jobs:
             libgtk-3-dev
 
       - run: npm ci
+
+      - name: Download mc binary (required by Tauri externalBin)
+        run: |
+          mkdir -p src-tauri/binaries
+          curl -fSL "https://dl.min.io/client/mc/release/linux-amd64/mc" \
+            -o "src-tauri/binaries/mc-x86_64-unknown-linux-gnu"
+          chmod +x src-tauri/binaries/mc-x86_64-unknown-linux-gnu
 
       - name: TypeScript check
         run: npx tsc --noEmit
