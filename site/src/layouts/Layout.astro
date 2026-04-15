@@ -1,0 +1,45 @@
+---
+import "../styles/global.css";
+import type { Lang } from "../i18n/ui";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	lang: Lang;
+}
+
+const { title, description, lang } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="/minio-console/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link
+			rel="preconnect"
+			href="https://rsms.me/"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://rsms.me/inter/inter.css"
+		/>
+		<title>{title}</title>
+	</head>
+	<body class="bg-slate-950 text-slate-100 antialiased selection:bg-brand-500 selection:text-white">
+		<Header lang={lang} />
+		<main>
+			<slot />
+		</main>
+		<Footer lang={lang} />
+	</body>
+</html>

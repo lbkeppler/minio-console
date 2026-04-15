@@ -1,0 +1,81 @@
+---
+import type { Lang } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const features = [
+	{
+		icon: `<path d="M3 3v18h18"></path><path d="M7 12l4-4 4 4 6-6"></path>`,
+		title: t("features.dashboard.title"),
+		desc: t("features.dashboard.desc"),
+	},
+	{
+		icon: `<path d="M21 8v13H3V8"></path><path d="M1 3h22v5H1z"></path><path d="M10 12h4"></path>`,
+		title: t("features.buckets.title"),
+		desc: t("features.buckets.desc"),
+	},
+	{
+		icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`,
+		title: t("features.objects.title"),
+		desc: t("features.objects.desc"),
+	},
+	{
+		icon: `<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>`,
+		title: t("features.iam.title"),
+		desc: t("features.iam.desc"),
+	},
+	{
+		icon: `<polyline points="4 17 10 11 4 5"></polyline><line x1="12" x2="20" y1="19" y2="19"></line>`,
+		title: t("features.terminal.title"),
+		desc: t("features.terminal.desc"),
+	},
+	{
+		icon: `<rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line>`,
+		title: t("features.multi.title"),
+		desc: t("features.multi.desc"),
+	},
+];
+---
+
+<section id="features" class="py-24 md:py-32">
+	<div class="mx-auto max-w-6xl px-6">
+		<div class="mx-auto max-w-2xl text-center">
+			<h2 class="text-4xl font-bold tracking-tight md:text-5xl">
+				{t("features.title")}
+			</h2>
+			<p class="mt-6 text-lg text-slate-400">
+				{t("features.subtitle")}
+			</p>
+		</div>
+
+		<div class="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				features.map((f) => (
+					<div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-all hover:border-brand-500/30 hover:bg-white/[0.04]">
+						<div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-600/10 text-brand-400 ring-1 ring-brand-500/20 transition-all group-hover:ring-brand-500/40">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								set:html={f.icon}
+							/>
+						</div>
+						<h3 class="text-lg font-semibold text-white">{f.title}</h3>
+						<p class="mt-2 text-sm leading-relaxed text-slate-400">{f.desc}</p>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import Download from "../components/Download.astro";
+
+const lang = "pt";
+---
+
+<Layout
+	title="MinIO Console — Desktop app para gerenciar MinIO"
+	description="Console desktop nativo para MinIO. Multi-perfil, terminal mc integrado, credenciais seguras. Windows, macOS e Linux."
+	lang={lang}
+>
+	<Hero lang={lang} />
+	<Features lang={lang} />
+	<Download lang={lang} />
+</Layout>

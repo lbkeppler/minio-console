@@ -1,0 +1,49 @@
+---
+import type { Lang } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="border-t border-white/5 py-12">
+	<div class="mx-auto max-w-6xl px-6">
+		<div class="flex flex-col items-center justify-between gap-6 md:flex-row">
+			<div class="flex flex-col items-center gap-1 md:items-start">
+				<span class="text-sm text-slate-400">{t("footer.tagline")}</span>
+				<span class="text-xs text-slate-600">{t("footer.license")}</span>
+			</div>
+
+			<div class="flex items-center gap-6 text-sm text-slate-400">
+				<a
+					href="https://github.com/lbkeppler/minio-console"
+					target="_blank"
+					rel="noopener"
+					class="hover:text-slate-100"
+				>
+					{t("footer.links.github")}
+				</a>
+				<a
+					href="https://github.com/lbkeppler/minio-console/issues"
+					target="_blank"
+					rel="noopener"
+					class="hover:text-slate-100"
+				>
+					{t("footer.links.issues")}
+				</a>
+				<a
+					href="https://github.com/lbkeppler/minio-console/releases"
+					target="_blank"
+					rel="noopener"
+					class="hover:text-slate-100"
+				>
+					{t("footer.links.releases")}
+				</a>
+			</div>
+		</div>
+	</div>
+</footer>
