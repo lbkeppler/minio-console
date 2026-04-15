@@ -5,6 +5,8 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
 	site: "https://lbkeppler.github.io",
 	base: "/minio-console",
+	outDir: "../docs",
+	cacheDir: "./.astro",
 	integrations: [tailwind()],
 	i18n: {
 		defaultLocale: "pt",

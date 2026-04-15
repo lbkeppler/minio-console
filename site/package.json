@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node -e \"['content-assets.mjs','content-modules.mjs','data-store.json','settings.json'].forEach(f=>{try{require('fs').unlinkSync('../docs/'+f)}catch(e){}})\"",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -5,7 +5,7 @@ Built with Tauri 2 (Rust backend) + React 18 + TypeScript + Tailwind CSS.
 
 ## Quick Reference
 
-- **Design Spec:** `docs/superpowers/specs/2026-04-10-minio-console-design.md`
+- **Design Spec:** `docs-specs/specs/2026-04-10-minio-console-design.md`
 - **Frontend:** `src/` — React 18, TypeScript strict, Tailwind CSS 4, Radix UI, Zustand
 - **Backend:** `src-tauri/` — Rust, Tauri 2, aws-sdk-s3, reqwest, tokio
 - **Tests:** Vitest (frontend), cargo test (backend), Playwright (E2E)
