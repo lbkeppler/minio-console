@@ -89,7 +89,7 @@ jobs:
           curl -fSL "$MC_URL" -o "$MC_OUT"
           chmod +x "$MC_OUT"
 
-      - name: Download mc binaries (macOS universal — both archs)
+      - name: Download mc binaries and create universal fat binary (macOS)
         if: runner.os == 'macOS'
         shell: bash
         run: |
@@ -101,6 +101,14 @@ jobs:
               -o "src-tauri/binaries/mc-${target}"
             chmod +x "src-tauri/binaries/mc-${target}"
           done
+          # Tauri with --target universal-apple-darwin looks for a fat binary
+          # named mc-universal-apple-darwin. Use lipo to merge both archs.
+          lipo -create \
+            src-tauri/binaries/mc-aarch64-apple-darwin \
+            src-tauri/binaries/mc-x86_64-apple-darwin \
+            -output src-tauri/binaries/mc-universal-apple-darwin
+          chmod +x src-tauri/binaries/mc-universal-apple-darwin
+          file src-tauri/binaries/mc-universal-apple-darwin
 
       - name: Build Tauri app
         run: npx tauri build --target ${{ matrix.build_target }}
