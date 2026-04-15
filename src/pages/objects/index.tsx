@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { ChevronRight, File, FolderOpen, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, ChevronRight, File, FolderOpen, Loader2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
@@ -24,7 +24,8 @@ export function ObjectsPage() {
 	const bucket = searchParams.get("bucket") ?? "";
 	const prefix = searchParams.get("prefix") ?? "";
 
-	const { objects, loading, currentBucket, setBucket, setPrefix, loadObjects } = useObjectStore();
+	const { objects, loading, currentBucket, currentPrefix, setBucket, setPrefix, loadObjects } =
+		useObjectStore();
 	const { addToast } = useToastStore();
 	const { t } = useTranslation();
 	const [uploadOpen, setUploadOpen] = useState(false);
@@ -37,6 +38,7 @@ export function ObjectsPage() {
 		}
 	}, [bucket, prefix, setBucket, setPrefix]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: currentPrefix drives reload when navigating folders
 	useEffect(() => {
 		if (currentBucket) {
 			loadObjects().catch((err) => {
@@ -47,7 +49,7 @@ export function ObjectsPage() {
 				});
 			});
 		}
-	}, [currentBucket, loadObjects, addToast]);
+	}, [currentBucket, currentPrefix, loadObjects, addToast]);
 
 	function navigateToPrefix(newPrefix: string) {
 		setSearchParams({ bucket, prefix: newPrefix });
@@ -123,27 +125,42 @@ export function ObjectsPage() {
 				</div>
 			</div>
 
-			<nav className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)]">
-				<button
-					type="button"
-					onClick={() => navigateToPrefix("")}
-					className="hover:text-[var(--color-text)]"
-				>
-					/
-				</button>
-				{breadcrumbs.map((crumb) => (
-					<span key={crumb.prefix} className="flex items-center gap-1">
-						<ChevronRight className="h-3 w-3" />
-						<button
-							type="button"
-							onClick={() => navigateToPrefix(crumb.prefix)}
-							className="hover:text-[var(--color-text)]"
-						>
-							{crumb.label}
-						</button>
-					</span>
-				))}
-			</nav>
+			<div className="flex items-center gap-3">
+				{prefix && (
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => {
+							const parent = prefixParts.slice(0, -1).join("/");
+							navigateToPrefix(parent ? `${parent}/` : "");
+						}}
+					>
+						<ArrowLeft className="h-4 w-4" />
+						{t("common.back")}
+					</Button>
+				)}
+				<nav className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)]">
+					<button
+						type="button"
+						onClick={() => navigateToPrefix("")}
+						className="hover:text-[var(--color-text)]"
+					>
+						/
+					</button>
+					{breadcrumbs.map((crumb) => (
+						<span key={crumb.prefix} className="flex items-center gap-1">
+							<ChevronRight className="h-3 w-3" />
+							<button
+								type="button"
+								onClick={() => navigateToPrefix(crumb.prefix)}
+								className="hover:text-[var(--color-text)]"
+							>
+								{crumb.label}
+							</button>
+						</span>
+					))}
+				</nav>
+			</div>
 
 			<SearchBar
 				onSearch={(query) => {

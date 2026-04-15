@@ -5,3 +5,4 @@ target/
 .claude/
 src-tauri/bin/
 src-tauri/binaries/
+.vscode/
