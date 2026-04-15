@@ -1,0 +1,61 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [site]
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site branch
+        uses: actions/checkout@v4
+        with:
+          ref: site
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        working-directory: site
+        run: npm install
+
+      - name: Build Astro site (outputs to ../docs)
+        working-directory: site
+        run: npm run build
+
+      - name: Checkout master branch into a worktree
+        run: |
+          git fetch origin master
+          git worktree add master-branch origin/master
+          # Copy freshly built docs into master worktree
+          rm -rf master-branch/docs
+          cp -r docs master-branch/docs
+          # Add .nojekyll so GitHub Pages serves files starting with _
+          touch master-branch/docs/.nojekyll
+
+      - name: Commit and push docs to master
+        run: |
+          cd master-branch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -z "$(git status --porcelain docs)" ]; then
+            echo "No changes in docs/ — skipping commit."
+            exit 0
+          fi
+          git add docs
+          git commit -m "chore(site): rebuild static site [skip ci]"
+          git push origin HEAD:master
