@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "MinIO Console Desktop Application"
 authors = []
 edition = "2021"
+license = "AGPL-3.0-or-later"
 
 [lib]
 name = "minio_console_lib"

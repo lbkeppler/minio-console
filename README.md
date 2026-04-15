@@ -14,6 +14,9 @@
   </a>
   <img alt="Platforms" src="https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" />
   <img alt="Built with" src="https://img.shields.io/badge/built%20with-Tauri%202%20%2B%20React-orange" />
+  <a href="LICENSE">
+    <img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-blue" />
+  </a>
 </p>
 
 ---
@@ -146,7 +149,9 @@ Achou um bug, tem uma ideia legal ou só quer bater um papo sobre o projeto? Abr
 
 ## License
 
-Private — All rights reserved.
+[AGPL-3.0](LICENSE) — GNU Affero General Public License v3.0.
+
+Se você usar esse código em um serviço acessível pela rede, o código-fonte (incluindo modificações) precisa ficar disponível pros usuários. Uso pessoal, comercial, fork e modificação são liberados, desde que respeitando os termos da licença.
 
 ---
 
