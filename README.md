@@ -1,132 +1,148 @@
 # MinIO Console
 
 <p align="center">
-  <img src="src-tauri/icons/128x128@2x.png" width="128" alt="MinIO Console Icon" />
+  <img src="src-tauri/icons/128x128@2x.png" width="128" alt="MinIO Console" />
 </p>
 
 <p align="center">
-  <strong>Cross-platform desktop application for complete MinIO server management.</strong>
+  <strong>Um console desktop pra gerenciar seus servidores MinIO sem dor de cabeça.</strong>
 </p>
 
 <p align="center">
-  Built with Tauri 2 + React 18 + TypeScript + Tailwind CSS 4
+  <a href="https://github.com/lbkeppler/minio-console/releases/latest">
+    <img alt="Latest Release" src="https://img.shields.io/github/v/release/lbkeppler/minio-console?include_prereleases&color=6366f1" />
+  </a>
+  <img alt="Platforms" src="https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" />
+  <img alt="Built with" src="https://img.shields.io/badge/built%20with-Tauri%202%20%2B%20React-orange" />
 </p>
 
 ---
 
-## Features
+## Por que esse projeto existe
 
-- **Dashboard** — Server overview with real-time status, capacity and uptime
-- **Buckets** — Create, delete, configure versioning and access policies (private/download/public)
-- **Objects** — Browse, upload, download and manage objects with prefix navigation
-- **Users** — Create and manage IAM users with service accounts
-- **Groups** — Organize users into groups with policy assignments
-- **Policies** — View, create and attach IAM policies
-- **Monitoring** — Real-time server metrics and performance data
-- **Terminal** — Built-in MC command interface with full autocomplete (Tab/comma trigger)
-- **Multi-profile** — Connect to multiple MinIO servers with secure credential storage
-- **i18n** — English and Portuguese (BR) included
+O console web oficial do MinIO é legal, mas rodar uma app nativa no desktop tem umas vantagens que fazem diferença no dia a dia:
 
-## Screenshots
+- **Zero browser, zero porta aberta** — abre como qualquer outro programa
+- **Credenciais seguras no keychain do SO** — nada de senha salva em texto puro
+- **Múltiplos servidores num lugar só** — troca de perfil com um clique
+- **Tudo funciona offline** — menos a parte que precisa falar com o servidor, óbvio 😄
 
-> _Coming soon_
+A ideia é juntar o poder do `mc` CLI com uma interface gráfica que não trava, não precisa de conexão com a internet pra carregar, e entende quem usa isso todo dia.
 
-## Tech Stack
+## O que tem dentro
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [Tauri 2](https://tauri.app/) |
-| Frontend | React 18, TypeScript (strict), Tailwind CSS 4, Radix UI |
-| State | Zustand |
-| Backend | Rust, aws-sdk-s3, reqwest, tokio |
-| Credentials | keyring-rs (OS native credential store) |
-| Lint/Format | Biome (frontend), clippy + rustfmt (backend) |
-| Build | Vite (frontend), Cargo (backend) |
+| Feature | O que faz |
+|---------|-----------|
+| **Dashboard** | Visão geral do servidor — status, capacidade, uptime, tudo em tempo real |
+| **Buckets** | Cria, apaga, configura versioning e política de acesso (privado / download / público — bem simples) |
+| **Objects** | Navega pelas pastas, faz upload, download, preview de arquivo, share link, tudo |
+| **Users & Groups** | Gerencia IAM sem precisar decorar comando nenhum |
+| **Policies** | Cria, edita e atribui policies visualmente |
+| **Monitoring** | Métricas do servidor em tempo real |
+| **MC Terminal** | Terminal integrado com autocomplete (Tab ou vírgula pra ver todos os comandos) |
+| **Multi-perfil** | Conecta em vários MinIOs e alterna rapidinho |
+| **Tradução** | Português, Inglês e Espanhol |
 
-## Prerequisites
+## Download
 
-- [Node.js](https://nodejs.org/) >= 18
-- [Rust](https://www.rust-lang.org/tools/install) >= 1.75
-- [Tauri CLI](https://tauri.app/start/prerequisites/) prerequisites for your OS
-- MinIO server (local or remote) with access/secret keys
+Pega o instalador pra sua plataforma na [página de releases](https://github.com/lbkeppler/minio-console/releases/latest):
 
-## Getting Started
+- **Windows** — `.msi` ou `.exe` setup
+- **macOS** — `.dmg` universal (roda em Intel **e** Apple Silicon, mesmo arquivo)
+- **Linux** — `.deb`, `.rpm` ou `.AppImage`
+
+> 💡 O binário do `mc` já vem junto no instalador. Não precisa instalar nada além da app.
+
+## Quero rodar localmente
+
+Você vai precisar de:
+
+- [Node.js](https://nodejs.org/) 18+
+- [Rust](https://www.rust-lang.org/tools/install) 1.75+
+- [Pré-requisitos do Tauri](https://tauri.app/start/prerequisites/) pro seu sistema
+- Um servidor MinIO (local ou remoto) com access/secret key
+
+Depois é só:
 
 ```bash
-# Clone
 git clone https://github.com/lbkeppler/minio-console.git
 cd minio-console
-
-# Install dependencies
 npm install
 
-# Start in development mode (frontend + backend hot-reload)
+# Baixa o mc pra sua plataforma (dev)
+./scripts/download-mc.sh   # Linux/macOS
+# ou
+.\scripts\download-mc.ps1  # Windows
+
+# Roda em modo dev (hot-reload no front e no back)
 npm run tauri dev
 ```
 
-The app window will open automatically. Configure your first MinIO server profile in Settings.
+A janela abre sozinha. Na primeira vez, vai em **Settings → Add Profile** pra configurar seu servidor.
 
-## Development Commands
+## Stack
 
-```bash
-# Dev
-npm run tauri dev          # Full app (frontend + Rust backend)
-npm run dev                # Frontend only (Vite dev server on :1420)
-cargo test                 # Rust backend tests
-npx biome check           # Lint + format check
-cargo clippy               # Rust lint
+Escolhi as ferramentas pensando em **performance**, **tamanho de instalador** e **segurança**:
 
-# Build
-npm run tauri build        # Production build for current platform
-```
+| Camada | Tecnologia |
+|--------|-----------|
+| Framework | [Tauri 2](https://tauri.app/) — web view nativa + backend Rust |
+| Frontend | React 18, TypeScript strict, Tailwind CSS 4, Radix UI |
+| Estado | Zustand |
+| Backend | Rust (aws-sdk-s3, reqwest, tokio) |
+| Credenciais | `keyring-rs` — usa o keychain nativo do SO |
+| Lint/Format | Biome (front), clippy + rustfmt (back) |
+| Build | Vite (front), Cargo (back) |
 
-## Project Structure
+## Estrutura do projeto
 
 ```
 minio-console/
-├── src/                        # Frontend (React + TypeScript)
-│   ├── components/ui/          # Shared UI components (Button, Dialog, DataTable...)
-│   ├── pages/                  # Feature pages
-│   │   ├── dashboard/          # Server overview
-│   │   ├── buckets/            # Bucket management + settings
-│   │   ├── objects/            # Object browser
-│   │   ├── users/              # User management
-│   │   ├── groups/             # Group management
-│   │   ├── policies/           # IAM policies
-│   │   ├── monitoring/         # Server metrics
-│   │   ├── terminal/           # MC terminal with autocomplete
-│   │   └── settings/           # App settings + profiles
-│   ├── stores/                 # Zustand state stores
-│   ├── lib/                    # Tauri IPC wrappers
-│   └── i18n/                   # Internationalization (en, pt-BR)
-├── src-tauri/                  # Backend (Rust)
+├── src/                    # Frontend React
+│   ├── components/ui/      # Componentes compartilhados
+│   ├── pages/              # Uma pasta por feature
+│   ├── stores/             # Estados Zustand
+│   ├── lib/                # Wrappers do Tauri invoke()
+│   └── i18n/               # Traduções (en, es, pt-BR)
+├── src-tauri/              # Backend Rust
 │   └── src/
-│       ├── commands/           # Tauri IPC command handlers
-│       ├── s3/                 # S3 client operations
-│       ├── admin/              # MinIO admin API
-│       ├── mc/                 # MC CLI runner
-│       ├── config/             # App configuration
-│       └── models/             # Shared types
-└── docs/                       # Design specs and documentation
+│       ├── commands/       # Handlers dos invokes
+│       ├── s3/             # Cliente S3
+│       ├── admin/          # API admin do MinIO
+│       ├── mc/             # Runner do mc CLI
+│       ├── config/         # Configuração da app
+│       └── models/         # Tipos compartilhados
+├── scripts/                # Scripts auxiliares (download do mc)
+└── docs/                   # Specs e design docs
 ```
 
-## Building for Production
+## Comandos úteis
 
 ```bash
-npm run tauri build
+npm run tauri dev          # Desenvolvimento (front + back com hot-reload)
+npm run tauri build        # Build de produção pro seu SO
+npm run dev                # Só o front (Vite em :1420)
+cargo test                 # Testes do backend
+npx biome check            # Lint + format do front
+cargo clippy               # Lint do Rust
 ```
 
-Outputs platform-specific installers:
-- **Windows**: `.msi` / `.exe` in `src-tauri/target/release/bundle/`
-- **macOS**: `.dmg` / `.app`
-- **Linux**: `.deb` / `.AppImage`
+## CI/CD
 
-## Conventions
+Todo push de tag `v*` dispara o workflow de release — builda Windows, macOS Universal e Linux em paralelo no GitHub Actions e publica um release draft com todos os instaladores. Eu revisar e liberar.
 
-- **Language**: Code and comments in English. UI supports i18n.
-- **Commits**: Conventional commits (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`)
-- **IPC**: Frontend calls backend via Tauri `invoke()`. All commands are async, return `Result<T, String>`.
-- **Credentials**: Never stored in plaintext. Uses OS keychain via `keyring-rs`.
+Veja [`.github/workflows/release.yml`](.github/workflows/release.yml).
+
+## Convenções que sigo no projeto
+
+- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, etc.)
+- **Idioma do código**: inglês sempre. A UI é traduzida.
+- **IPC**: front chama back via `invoke()`. Tudo async, tudo retorna `Result<T, String>`.
+- **Credenciais**: nunca em plaintext — sempre via keychain do SO.
+
+## Contribuindo
+
+Achou um bug, tem uma ideia legal ou só quer bater um papo sobre o projeto? Abre uma [issue](https://github.com/lbkeppler/minio-console/issues) ou manda um PR.
 
 ## License
 
@@ -135,5 +151,5 @@ Private — All rights reserved.
 ---
 
 <p align="center">
-  Made with Rust + React + Tauri
+  Feito com ☕ e muita paciência usando <strong>Rust + React + Tauri</strong>
 </p>
